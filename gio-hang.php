@@ -93,19 +93,6 @@ session_start();
     <!-- Popup Overlay -->
     <div class="popup-overlay" id="popupOverlay"></div>
 
-    <!-- Navigation Menu -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="category-menu" id="categoryMenu">
-                <a href="trang-chu.php" class="category-link">🏠 TRANG CHỦ</a>
-                <a href="cua-hang.php?category=0-3" class="category-link">0-3 THÁNG</a>
-                <a href="cua-hang.php?category=3-6" class="category-link">3-6 THÁNG</a>
-                <a href="cua-hang.php?category=6-12" class="category-link">6-12 THÁNG</a>
-                <a href="cua-hang.php?category=phu-kien" class="category-link">PHỤ KIỆN</a>
-            </div>
-        </div>
-    </nav>
-
     <div class="container">
         <h1>🛒 Giỏ Hàng</h1>
 
