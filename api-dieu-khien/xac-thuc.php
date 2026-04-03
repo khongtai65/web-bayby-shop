@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
             exit;
         }
         
-        $sql = "SELECT id, username, name, full_name, phone, password FROM users WHERE username = ? LIMIT 1";
+        $sql = "SELECT id, username, name, full_name, phone, password, role FROM users WHERE username = ? LIMIT 1";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
             throw new Exception('Prepare failed');
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['full_name'] = $user['full_name'];
             $_SESSION['user_phone'] = $user['phone'];
-            $_SESSION['role'] = 'user'; // default role
+            $_SESSION['role'] = $user['role'] ?? 'user'; // Lấy role từ database
             
             // Remember me (secure cookies)
             if ($remember) {
