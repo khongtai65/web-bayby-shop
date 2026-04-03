@@ -298,16 +298,30 @@ function number_format_human(num) {
 // Load featured products (homepage)
 async function loadFeaturedProducts() {
     try {
+        console.log('📦 Loading featured products from:', `${API_BASE}/san-pham.php`);
         const response = await fetch(`${API_BASE}/san-pham.php`);
-        const data = await response.json();
+        console.log('📡 API Response status:', response.status);
         
-        if (data.status === 'success') {
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('📦 API Data received:', data);
+        
+        if (data.status === 'success' && data.data && Array.isArray(data.data) && data.data.length > 0) {
             const featured = data.data.slice(0, 4);
             const html = featured.map(p => createProductCard(p)).join('');
             document.getElementById('featured-products').innerHTML = html;
+            console.log('✅ Featured products loaded:', featured.length);
+        } else {
+            // Fallback empty state
+            document.getElementById('featured-products').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Chưa có sản phẩm nổi bật</div>';
+            console.warn('⚠️ No products in API response');
         }
     } catch (error) {
-        console.error('Error loading featured products:', error);
+        console.error('❌ Error loading featured products:', error);
+        document.getElementById('featured-products').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #e74c3c;">Lỗi khi tải sản phẩm (API không phản hồi)</div>';
     }
     
     updateCartCount();

@@ -66,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit;
     } catch (Exception $e) {
         error_log("Product GET error: " . $e->getMessage());
+        error_log("Stack trace: " . $e->getTraceAsString());
         jsonResponse('error', 'Failed to retrieve products: ' . $e->getMessage(), null, 500);
         exit;
     }
