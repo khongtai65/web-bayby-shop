@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
         // Lấy 1 sản phẩm
         if ($id) {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, created_at FROM products WHERE id = ?";
+            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Prepare failed');
@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
         // Lấy tất cả sản phẩm hoặc lọc theo danh mục
         if ($category) {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image FROM products WHERE category = ? LIMIT 1000";
+            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE category = ? ORDER BY id DESC LIMIT 1000";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Prepare failed');
             }
             $stmt->bind_param("s", $category);
         } else {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image FROM products ORDER BY id ASC LIMIT 1000";
+            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products ORDER BY id DESC LIMIT 1000";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Prepare failed');
@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $category = $_POST['category'] ?? '';
         $stock = $_POST['stock'] ?? 100;
         $discount_percent = $_POST['discount_percent'] ?? 0;
+        $gender = $_POST['gender'] ?? '';
         
         // Validate input
         if (!$name || !is_numeric($price) || $price <= 0) {
@@ -99,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $name = sanitizeInput($name);
         $description = sanitizeInput($description);
         $category = sanitizeInput($category);
+        $gender = sanitizeInput($gender);
         $discount_percent = floatval($discount_percent);
         
         // Xử lý upload ảnh
@@ -134,12 +136,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             jsonResponse('error', 'Image file is required', null, 400);
         }
         
-        $sql = "INSERT INTO products (name, price, discount_percent, description, category, stock, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO products (name, price, discount_percent, description, category, stock, image, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
             throw new Exception('Prepare failed');
         }
-        $stmt->bind_param("sddssss", $name, $price, $discount_percent, $description, $category, $stock, $image_path);
+        $stmt->bind_param("sddsssss", $name, $price, $discount_percent, $description, $category, $stock, $image_path, $gender);
         
         if ($stmt->execute()) {
             jsonResponse('success', 'Product added', ['id' => $conn->insert_id], 201);

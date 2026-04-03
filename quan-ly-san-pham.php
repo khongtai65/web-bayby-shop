@@ -303,6 +303,23 @@ if ($result) {
 
                 <div class="form-row">
                     <div class="form-group">
+                        <label for="gender">Giới Tính *</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">-- Chọn giới tính --</option>
+                            <option value="be-trai">👦 Bé Trai</option>
+                            <option value="be-gai">👧 Bé Gái</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div style="padding: 10px; background: #e8f4f8; border-radius: 5px; text-align: center; font-size: 0.9rem; color: #333;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="price">Giá Gốc (VND) *</label>
                         <input type="number" id="price" name="price" required min="1000" placeholder="50000">
                     </div>
@@ -474,6 +491,7 @@ if ($result) {
                     formData.append('discount_percent', parseFloat(document.getElementById('discount_percent').value) || 0);
                     formData.append('description', document.getElementById('description').value);
                     formData.append('category', document.getElementById('category').value);
+                    formData.append('gender', document.getElementById('gender').value);
                     formData.append('stock', parseInt(document.getElementById('stock').value));
                     
                     const imageFile = document.getElementById('image').files[0];
