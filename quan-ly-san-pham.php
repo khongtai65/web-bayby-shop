@@ -416,22 +416,6 @@ if ($result) {
             const formatted = Math.round(finalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             priceDisplay.textContent = formatted + ' ₫';
         }
-        
-        // Setup event listeners when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            const priceInput = document.getElementById('price');
-            const discountInput = document.getElementById('discount_percent');
-            
-            if (priceInput) {
-                priceInput.addEventListener('input', calculatePrice);
-            }
-            if (discountInput) {
-                discountInput.addEventListener('input', calculatePrice);
-            }
-            
-            // Initial calculation
-            calculatePrice();
-        });
 
         // Xem trước ảnh
         function previewImage(input) {
@@ -460,47 +444,64 @@ if ($result) {
             calculatePrice();
         }
 
-        // Submit form thêm sản phẩm
+        // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('productForm');
-            if (!form) return;
+            // Setup price calculation listeners
+            const priceInput = document.getElementById('price');
+            const discountInput = document.getElementById('discount_percent');
             
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+            if (priceInput) {
+                priceInput.addEventListener('input', calculatePrice);
+                priceInput.addEventListener('change', calculatePrice);
+            }
+            if (discountInput) {
+                discountInput.addEventListener('input', calculatePrice);
+                discountInput.addEventListener('change', calculatePrice);
+            }
+            
+            // Initial calculation
+            calculatePrice();
+            
+            // Setup form submit
+            const form = document.getElementById('productForm');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
 
-                const formData = new FormData();
-                formData.append('name', document.getElementById('name').value);
-                formData.append('price', parseFloat(document.getElementById('price').value));
-                formData.append('discount_percent', parseFloat(document.getElementById('discount_percent').value) || 0);
-                formData.append('description', document.getElementById('description').value);
-                formData.append('category', document.getElementById('category').value);
-                formData.append('stock', parseInt(document.getElementById('stock').value));
-                
-                const imageFile = document.getElementById('image').files[0];
-                if (imageFile) {
-                    formData.append('image', imageFile);
-                }
-
-                try {
-                    const response = await fetch('./api-dieu-khien/san-pham.php', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const data = await response.json();
-
-                    if (data.status === 'success') {
-                        alert('✅ Thêm sản phẩm thành công!');
-                        resetForm();
-                        location.reload();
-                    } else {
-                        alert('❌ Lỗi: ' + data.message);
+                    const formData = new FormData();
+                    formData.append('name', document.getElementById('name').value);
+                    formData.append('price', parseFloat(document.getElementById('price').value));
+                    formData.append('discount_percent', parseFloat(document.getElementById('discount_percent').value) || 0);
+                    formData.append('description', document.getElementById('description').value);
+                    formData.append('category', document.getElementById('category').value);
+                    formData.append('stock', parseInt(document.getElementById('stock').value));
+                    
+                    const imageFile = document.getElementById('image').files[0];
+                    if (imageFile) {
+                        formData.append('image', imageFile);
                     }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('❌ Lỗi khi thêm sản phẩm: ' + error.message);
-                }
-            });
+
+                    try {
+                        const response = await fetch('./api-dieu-khien/san-pham.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        if (data.status === 'success') {
+                            alert('✅ Thêm sản phẩm thành công!');
+                            resetForm();
+                            location.reload();
+                        } else {
+                            alert('❌ Lỗi: ' + data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('❌ Lỗi khi thêm sản phẩm: ' + error.message);
+                    }
+                });
+            }
         });
 
         // Sửa sản phẩm
@@ -523,7 +524,6 @@ if ($result) {
                 price: parseFloat(newPrice),
                 stock: parseInt(newStock),
                 discount_percent: parseFloat(newDiscount)
-                stock: parseInt(newStock)
             };
 
             fetch('./api-dieu-khien/san-pham.php', {
