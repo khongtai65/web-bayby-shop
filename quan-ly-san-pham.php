@@ -307,11 +307,11 @@ if ($result) {
                         <input type="number" id="price" name="price" required min="1000" placeholder="50000">
                     </div>
                     <div class="form-group">
-                        <label for="discount_percent">Giảm Giá (%)</label>
+                        <label for="discount_percent">Giảm Giá (%) - Tối thiểu 1%, tối đa 100%</label>
                         <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="number" id="discount_percent" name="discount_percent" min="0" max="100" value="0" placeholder="0" step="0.5" style="flex: 1;">
-                            <div style="padding: 10px; background: #f0f0f0; border-radius: 5px; font-weight: bold; min-width: 100px;">
-                                Giá: <span id="discounted-price" style="color: #E74C3C;">0 ₫</span>
+                            <input type="number" id="discount_percent" name="discount_percent" min="1" max="100" value="0" placeholder="1-100" step="0.5" style="flex: 1;">
+                            <div style="padding: 10px; background: #f0f0f0; border-radius: 5px; font-weight: bold; min-width: 120px; text-align: right;">
+                                Giá: <span id="discounted-price" style="color: #E74C3C; display: block; font-size: 1.1rem;">0 ₫</span>
                             </div>
                         </div>
                     </div>
@@ -398,36 +398,29 @@ if ($result) {
     </div>
 
     <script>
-        console.log('Product management script loaded');
-        
         // Tính giá sau giảm
         function calculateDiscountedPrice() {
-            try {
-                const priceInput = document.getElementById('price');
-                const discountInput = document.getElementById('discount_percent');
-                const resultSpan = document.getElementById('discounted-price');
-                
-                if (!priceInput || !discountInput || !resultSpan) {
-                    console.error('Missing elements - Price:', !!priceInput, 'Discount:', !!discountInput, 'Result:', !!resultSpan);
-                    return;
-                }
-                
-                const price = parseFloat(priceInput.value) || 0;
-                const discountPercent = parseFloat(discountInput.value) || 0;
-                const discountedPrice = price - (price * discountPercent / 100);
-                
-                // Format to 0 decimal places with dot separator
-                const formatted = Math.round(discountedPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                console.log('Price:', price, 'Discount:', discountPercent, 'Final:', discountedPrice, 'Formatted:', formatted);
-                
-                resultSpan.textContent = formatted + ' ₫';
-            } catch (error) {
-                console.error('Error in calculateDiscountedPrice:', error);
+            const priceInput = document.getElementById('price');
+            const discountInput = document.getElementById('discount_percent');
+            const resultSpan = document.getElementById('discounted-price');
+            
+            if (!priceInput || !discountInput || !resultSpan) {
+                return;
             }
+            
+            const price = parseFloat(priceInput.value) || 0;
+            let discountPercent = parseFloat(discountInput.value) || 0;
+            
+            // Validate discount percent
+            if (discountPercent < 1) discountPercent = 0;
+            if (discountPercent > 100) discountPercent = 100;
+            
+            const discountedPrice = price - (price * discountPercent / 100);
+            
+            // Format number with dot separator
+            const formatted = Math.round(discountedPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            resultSpan.textContent = formatted + ' ₫';
         }
-        
-        // Test immediately
-        console.log('calculateDiscountedPrice function defined');
         
         // Xem trước ảnh
         function previewImage(input) {
@@ -450,40 +443,34 @@ if ($result) {
             const preview = document.getElementById('image-preview');
             if (preview) preview.style.display = 'none';
             document.getElementById('discounted-price').textContent = '0 ₫';
+            document.getElementById('discount_percent').value = '0';
             calculateDiscountedPrice();
         }
 
-        // Initialize on page load
-        window.addEventListener('load', () => {
-            console.log('Window load event triggered');
-            
-            // Test calculate immediately
-            calculateDiscountedPrice();
-            
-            // Add real-time calculation on input change
+        // Initialize listeners
+        function initializePriceCalculation() {
             const priceInput = document.getElementById('price');
             const discountInput = document.getElementById('discount_percent');
             
             if (priceInput) {
-                priceInput.addEventListener('input', () => {
-                    console.log('Price input changed');
-                    calculateDiscountedPrice();
-                });
-                console.log('Price input listener added');
-            } else {
-                console.error('Price input element not found');
+                priceInput.addEventListener('input', calculateDiscountedPrice);
+                priceInput.addEventListener('change', calculateDiscountedPrice);
             }
             
             if (discountInput) {
-                discountInput.addEventListener('input', () => {
-                    console.log('Discount input changed');
-                    calculateDiscountedPrice();
-                });
-                console.log('Discount input listener added');
-            } else {
-                console.error('Discount input element not found');
+                discountInput.addEventListener('input', calculateDiscountedPrice);
+                discountInput.addEventListener('change', calculateDiscountedPrice);
             }
-        });
+            
+            calculateDiscountedPrice();
+        }
+        
+        // Run on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePriceCalculation);
+        } else {
+            initializePriceCalculation();
+        }
 
         // Submit form thêm sản phẩm
         document.getElementById('productForm').addEventListener('submit', async (e) => {
