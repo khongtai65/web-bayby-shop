@@ -4,18 +4,25 @@ require_once 'config.php';
 
 // Get product ID from URL
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$is_error = false;
+$error_message = '';
 
 if ($product_id <= 0) {
     header('Location: cua-hang.php');
     exit;
 }
 
+$product = null;
+$related_products = [];
+$bestsell_products = [];
+
 // Fetch product details with all info
 try {
     $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
     $stmt = $conn->prepare($sql);
+    if (!$stmt) throw new Exception('Prepare failed: ' . $conn->error);
     $stmt->bind_param("i", $product_id);
-    $stmt->execute();
+    if (!$stmt->execute()) throw new Exception('Execute failed: ' . $stmt->error);
     $result = $stmt->get_result();
     $product = $result->fetch_assoc();
     
@@ -27,20 +34,52 @@ try {
     // Fetch related products from same category
     $sql_related = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock FROM products WHERE category = ? AND id != ? LIMIT 12";
     $stmt_related = $conn->prepare($sql_related);
+    if (!$stmt_related) throw new Exception('Prepare related failed: ' . $conn->error);
     $stmt_related->bind_param("si", $product['category'], $product_id);
-    $stmt_related->execute();
+    if (!$stmt_related->execute()) throw new Exception('Execute related failed: ' . $stmt_related->error);
     $related_result = $stmt_related->get_result();
     $related_products = $related_result->fetch_all(MYSQLI_ASSOC);
     
     // Best selling products
     $sql_bestsell = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock FROM products WHERE category != ? ORDER BY id DESC LIMIT 10";
     $stmt_bestsell = $conn->prepare($sql_bestsell);
+    if (!$stmt_bestsell) throw new Exception('Prepare bestsell failed: ' . $conn->error);
     $stmt_bestsell->bind_param("s", $product['category']);
-    $stmt_bestsell->execute();
+    if (!$stmt_bestsell->execute()) throw new Exception('Execute bestsell failed: ' . $stmt_bestsell->error);
     $bestsell_result = $stmt_bestsell->get_result();
     $bestsell_products = $bestsell_result->fetch_all(MYSQLI_ASSOC);
 } catch (Exception $e) {
-    die("Lỗi: " . $e->getMessage());
+    error_log("CHI-TIET-V1 ERROR: " . $e->getMessage());
+    $is_error = true;
+    $error_message = $e->getMessage();
+}
+
+if ($product === null || $is_error) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: text/html; charset=utf-8');
+    ?>
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <title>Lỗi - Shop Mẹ và Bé Đông Lan</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: Arial, sans-serif; background: #f5f5f5; }
+            .error-container { max-width: 600px; margin: 100px auto; background: white; padding: 40px; border-radius: 10px; }
+            .error-title { color: #e74c3c; font-size: 24px; margin-bottom: 20px; }
+            a { color: #0066cc; text-decoration: none; display: inline-block; margin-top: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <div class="error-title">❌ Lỗi khi tải sản phẩm</div>
+            <a href="cua-hang.php">← Quay lại cửa hàng</a>
+        </div>
+    </body>
+    </html>
+    <?php
+    exit;
 }
 
 // Calculate final price

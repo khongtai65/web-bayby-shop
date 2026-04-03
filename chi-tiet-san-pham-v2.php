@@ -3,18 +3,33 @@ session_start();
 require_once 'config.php';
 
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$is_error = false;
+$error_message = '';
 
 if ($product_id <= 0) {
     header('Location: cua-hang.php');
     exit;
 }
 
+$product = null;
+$related_products = [];
+
 try {
     $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, created_at FROM products WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $product_id);
-    $stmt->execute();
+    if (!$stmt) {
+        throw new Exception('Prepare failed: ' . $conn->error);
+    }
+    if (!$stmt->bind_param("i", $product_id)) {
+        throw new Exception('Bind failed: ' . $stmt->error);
+    }
+    if (!$stmt->execute()) {
+        throw new Exception('Execute failed: ' . $stmt->error);
+    }
     $result = $stmt->get_result();
+    if (!$result) {
+        throw new Exception('Get result failed: ' . $stmt->error);
+    }
     $product = $result->fetch_assoc();
     
     if (!$product) {
@@ -24,12 +39,69 @@ try {
     
     $sql_related = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock FROM products WHERE category = ? AND id != ? LIMIT 6";
     $stmt_related = $conn->prepare($sql_related);
-    $stmt_related->bind_param("si", $product['category'], $product_id);
-    $stmt_related->execute();
+    if (!$stmt_related) {
+        throw new Exception('Prepare related failed: ' . $conn->error);
+    }
+    if (!$stmt_related->bind_param("si", $product['category'], $product_id)) {
+        throw new Exception('Bind related failed: ' . $stmt_related->error);
+    }
+    if (!$stmt_related->execute()) {
+        throw new Exception('Execute related failed: ' . $stmt_related->error);
+    }
     $related_result = $stmt_related->get_result();
+    if (!$related_result) {
+        throw new Exception('Get related result failed: ' . $stmt_related->error);
+    }
     $related_products = $related_result->fetch_all(MYSQLI_ASSOC);
 } catch (Exception $e) {
-    die("Lỗi: " . $e->getMessage());
+    error_log("CHI-TIET ERROR: " . $e->getMessage());
+    $is_error = true;
+    $error_message = $e->getMessage();
+    $product = null;
+    $related_products = [];
+}
+
+if ($product === null || $is_error) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Content-Type: text/html; charset=utf-8');
+    ?>
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <title>Lỗi - Shop Mẹ và Bé Đông Lan</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: Arial, sans-serif; background: #f5f5f5; }
+            .error-container { max-width: 600px; margin: 100px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            .error-title { color: #e74c3c; font-size: 24px; margin-bottom: 20px; }
+            .error-message { color: #666; margin-bottom: 20px; }
+            .error-details { background: #f8f9fa; padding: 15px; border-radius: 5px; color: #999; font-size: 12px; font-family: monospace; }
+            a { color: #0066cc; text-decoration: none; margin-top: 20px; display: inline-block; }
+        </style>
+    </head>
+    <body>
+        <div class="error-container">
+            <div class="error-title">❌ Lỗi khi tải sản phẩm</div>
+            <div class="error-message">
+                <?php if ($is_error): ?>
+                    Không thể tải thông tin sản phẩm. 
+                    <?php if (defined('ENVIRONMENT') && ENVIRONMENT === 'development'): ?>
+                        <strong>Chi tiết lỗi:</strong>
+                    <?php endif; ?>
+                <?php else: ?>
+                    Sản phẩm không tồn tại.
+                <?php endif; ?>
+            </div>
+            <?php if (defined('ENVIRONMENT') && ENVIRONMENT === 'development'): ?>
+                <div class="error-details"><?php echo htmlspecialchars($error_message); ?></div>
+            <?php endif; ?>
+            <a href="cua-hang.php">← Quay lại cửa hàng</a>
+        </div>
+    </body>
+    </html>
+    <?php
+    exit;
 }
 
 $discount_percent = floatval($product['discount_percent']) ?? 0;
