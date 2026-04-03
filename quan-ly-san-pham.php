@@ -404,7 +404,7 @@ if ($result) {
             const discountPercent = parseFloat(document.getElementById('discount_percent').value) || 0;
             const discountedPrice = price - (price * discountPercent / 100);
             document.getElementById('discounted-price').textContent = 
-                discountedPrice.toLocaleString('vi-VN') + ' ₫';
+                parseFloat(discountedPrice).toLocaleString('vi-VN') + ' ₫';
         }
 
         // Xem trước ảnh
@@ -427,7 +427,17 @@ if ($result) {
             document.getElementById('productForm').reset();
             document.getElementById('image-preview').style.display = 'none';
             document.getElementById('discounted-price').textContent = '0 ₫';
+            calculateDiscountedPrice();
         }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateDiscountedPrice();
+            
+            // Add real-time calculation on input change
+            document.getElementById('price').addEventListener('input', calculateDiscountedPrice);
+            document.getElementById('discount_percent').addEventListener('input', calculateDiscountedPrice);
+        });
 
         // Submit form thêm sản phẩm
         document.getElementById('productForm').addEventListener('submit', async (e) => {
