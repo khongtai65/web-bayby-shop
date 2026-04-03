@@ -38,15 +38,17 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.3rem;
+    flex-wrap: wrap;
 }
 
 .header-left {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    flex: 0 0 auto;
+    flex: 1;
+    order: 1;
 }
 
 .header-logo {
@@ -63,19 +65,23 @@ body {
 }
 
 .logo-text {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.65rem;
+    line-height: 1.2;
+    color: white;
 }
 
 .header-search {
-    flex: 0.8;
+    flex: 1 1 100%;
     display: flex;
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
     padding: 0.25rem 0.5rem;
     align-items: center;
-    min-width: 120px;
-    max-width: 180px;
     gap: 0.3rem;
+    margin-top: 0.3rem;
+    order: 3;
 }
 
 .search-input {
@@ -102,6 +108,7 @@ body {
     align-items: center;
     gap: 0.4rem;
     flex: 0 0 auto;
+    order: 2;
 }
 
 .hotline-section {
