@@ -307,14 +307,23 @@ async function loadFeaturedProducts() {
 }
 
 // Load shop products
-async function loadProducts(category = '') {
+async function loadProducts(category = '', gender = '', weight = '') {
     try {
-        const url = category ? `${API_BASE}/san-pham.php?category=${category}` : `${API_BASE}/san-pham.php`;
+        let url = `${API_BASE}/san-pham.php`;
+        if (category) {
+            url += `?category=${encodeURIComponent(category)}`;
+        }
+        
         const response = await fetch(url);
         const data = await response.json();
         
         if (data.status === 'success') {
-            const html = data.data.map(p => createProductCard(p)).join('');
+            let products = data.data;
+            
+            // Filter by gender and weight if provided (implement as needed)
+            // For now, just use category filter from API
+            
+            const html = products.map(p => createProductCard(p)).join('');
             document.getElementById('products-container').innerHTML = html || '<p>Không có sản phẩm nào</p>';
         }
     } catch (error) {

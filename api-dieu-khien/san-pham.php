@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
         // Lấy 1 sản phẩm
         if ($id) {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image FROM products WHERE id = ?";
+            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, created_at FROM products WHERE id = ?";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Prepare failed');
