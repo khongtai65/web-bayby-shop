@@ -185,15 +185,9 @@ body {
     right: -4px;
 }
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR (HIDE ON MOBILE) ===== */
 .navbar {
-    background-color: #FFFFFF;
-    color: #333;
-    padding: 0;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 65px;
-    z-index: 100;
+    display: none !important;
 }
 
 .nav-container {
@@ -217,7 +211,7 @@ body {
 }
 
 .category-menu {
-    display: none;
+    display: none !important;
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
