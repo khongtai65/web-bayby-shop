@@ -12,7 +12,7 @@ if ($product_id <= 0) {
 
 // Fetch product details with all info
 try {
-    $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
+    $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $product_id);
     $stmt->execute();
@@ -25,7 +25,7 @@ try {
     }
     
     // Fetch related products from same category
-    $sql_related = "SELECT id, name, price, discount_percent, image, stock FROM products WHERE category = ? AND id != ? LIMIT 12";
+    $sql_related = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock FROM products WHERE category = ? AND id != ? LIMIT 12";
     $stmt_related = $conn->prepare($sql_related);
     $stmt_related->bind_param("si", $product['category'], $product_id);
     $stmt_related->execute();
@@ -33,7 +33,7 @@ try {
     $related_products = $related_result->fetch_all(MYSQLI_ASSOC);
     
     // Best selling products
-    $sql_bestsell = "SELECT id, name, price, discount_percent, image, stock FROM products WHERE category != ? ORDER BY id DESC LIMIT 10";
+    $sql_bestsell = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock FROM products WHERE category != ? ORDER BY id DESC LIMIT 10";
     $stmt_bestsell = $conn->prepare($sql_bestsell);
     $stmt_bestsell->bind_param("s", $product['category']);
     $stmt_bestsell->execute();

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
         // Case 1: Get single product by ID
         if ($id && $id > 0) {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
+            $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Database prepare error: ' . $conn->error);
@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
         // Case 2: Get products by category OR all products
         if ($category) {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE category = ? ORDER BY id DESC LIMIT 1000";
+            $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, gender, created_at FROM products WHERE category = ? ORDER BY id DESC LIMIT 1000";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Database prepare error: ' . $conn->error);
             }
             $stmt->bind_param("s", $category);
         } else {
-            $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products ORDER BY id DESC LIMIT 1000";
+            $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, gender, created_at FROM products ORDER BY id DESC LIMIT 1000";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception('Database prepare error: ' . $conn->error);

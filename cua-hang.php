@@ -8,7 +8,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
 // Load products from database
 $products = [];
 if ($category) {
-    $sql = "SELECT id, name, price, discount_percent, image, stock, created_at FROM products WHERE category = ? ORDER BY id DESC";
+    $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock, created_at FROM products WHERE category = ? ORDER BY id DESC";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("s", $category);
@@ -18,7 +18,7 @@ if ($category) {
         $stmt->close();
     }
 } else {
-    $sql = "SELECT id, name, price, discount_percent, image, stock, created_at FROM products ORDER BY id DESC";
+    $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock, created_at FROM products ORDER BY id DESC";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->execute();

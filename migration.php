@@ -52,7 +52,7 @@ try {
     echo "\n3. Displaying products info:\n";
     echo "   " . str_repeat("=", 80) . "\n";
     
-    $sql_display = "SELECT id, name, category, gender, price, discount_percent, stock FROM products ORDER BY id DESC LIMIT 10";
+    $sql_display = "SELECT id, name, category, gender, price, COALESCE(discount_percent, 0) as discount_percent, stock FROM products ORDER BY id DESC LIMIT 10";
     $result_display = $conn->query($sql_display);
     
     if ($result_display && $result_display->num_rows > 0) {

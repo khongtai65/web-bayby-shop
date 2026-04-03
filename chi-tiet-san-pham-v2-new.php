@@ -10,7 +10,7 @@ if ($product_id <= 0) {
 }
 
 try {
-    $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, created_at FROM products WHERE id = ?";
+    $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, description, category, stock, image, created_at FROM products WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $product_id);
     $stmt->execute();
@@ -22,7 +22,7 @@ try {
         exit;
     }
     
-    $sql_related = "SELECT id, name, price, discount_percent, image, stock FROM products WHERE category = ? AND id != ? LIMIT 6";
+    $sql_related = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock FROM products WHERE category = ? AND id != ? LIMIT 6";
     $stmt_related = $conn->prepare($sql_related);
     $stmt_related->bind_param("si", $product['category'], $product_id);
     $stmt_related->execute();

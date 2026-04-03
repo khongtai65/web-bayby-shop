@@ -261,7 +261,7 @@ require_once 'config.php';
                 echo '<div class="section">';
                 echo '<h2>✓ 5. Sản phẩm mới nhất</h2>';
                 
-                $latest = $conn->query("SELECT id, name, category, gender, price, discount_percent, stock, created_at FROM products ORDER BY created_at DESC LIMIT 5");
+                $latest = $conn->query("SELECT id, name, category, gender, price, COALESCE(discount_percent, 0) as discount_percent, stock, created_at FROM products ORDER BY created_at DESC LIMIT 5");
                 
                 if ($latest->num_rows > 0) {
                     echo '<table>';

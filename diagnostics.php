@@ -169,7 +169,7 @@ if ($result && $result->num_rows > 0) {
 
 // Latest products
 echo "<h3>🆕 Latest Products (Top 10)</h3>";
-$sql = "SELECT id, name, category, gender, price, discount_percent, stock, created_at 
+$sql = "SELECT id, name, category, gender, price, COALESCE(discount_percent, 0) as discount_percent, stock, created_at 
         FROM products 
         ORDER BY created_at DESC 
         LIMIT 10";

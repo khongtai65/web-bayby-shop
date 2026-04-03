@@ -28,7 +28,7 @@ if ($result) {
 
 // Test 3: Get All Products
 echo "<h2>3. Get All Products (Raw Query)</h2>";
-$result = $conn->query("SELECT id, name, price, discount_percent, image FROM products LIMIT 5");
+$result = $conn->query("SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image FROM products LIMIT 5");
 if ($result) {
     echo "✅ Query successful. Found " . $result->num_rows . " rows<br>";
     echo "<table border='1' cellpadding='5'>";
