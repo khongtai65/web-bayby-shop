@@ -304,12 +304,12 @@ if ($result) {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="price">Giá Gốc (VND) *</label>
-                        <input type="number" id="price" name="price" required min="1000" placeholder="50000" oninput="calculateDiscountedPrice()" onchange="calculateDiscountedPrice()">
+                        <input type="number" id="price" name="price" required min="1000" placeholder="50000">
                     </div>
                     <div class="form-group">
                         <label for="discount_percent">Giảm Giá (%)</label>
                         <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="number" id="discount_percent" name="discount_percent" min="0" max="100" value="0" placeholder="0" step="0.5" oninput="calculateDiscountedPrice()" onchange="calculateDiscountedPrice()" style="flex: 1;">
+                            <input type="number" id="discount_percent" name="discount_percent" min="0" max="100" value="0" placeholder="0" step="0.5" style="flex: 1;">
                             <div style="padding: 10px; background: #f0f0f0; border-radius: 5px; font-weight: bold; min-width: 100px;">
                                 Giá: <span id="discounted-price" style="color: #E74C3C;">0 ₫</span>
                             </div>
@@ -398,6 +398,8 @@ if ($result) {
     </div>
 
     <script>
+        console.log('Product management script loaded');
+        
         // Tính giá sau giảm
         function calculateDiscountedPrice() {
             try {
@@ -406,6 +408,7 @@ if ($result) {
                 const resultSpan = document.getElementById('discounted-price');
                 
                 if (!priceInput || !discountInput || !resultSpan) {
+                    console.error('Missing elements - Price:', !!priceInput, 'Discount:', !!discountInput, 'Result:', !!resultSpan);
                     return;
                 }
                 
@@ -413,7 +416,7 @@ if ($result) {
                 const discountPercent = parseFloat(discountInput.value) || 0;
                 const discountedPrice = price - (price * discountPercent / 100);
                 
-                // Format to 0 decimal places
+                // Format to 0 decimal places with dot separator
                 const formatted = Math.round(discountedPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 console.log('Price:', price, 'Discount:', discountPercent, 'Final:', discountedPrice, 'Formatted:', formatted);
                 
@@ -422,7 +425,10 @@ if ($result) {
                 console.error('Error in calculateDiscountedPrice:', error);
             }
         }
-
+        
+        // Test immediately
+        console.log('calculateDiscountedPrice function defined');
+        
         // Xem trước ảnh
         function previewImage(input) {
             const preview = document.getElementById('image-preview');
@@ -441,14 +447,17 @@ if ($result) {
         // Reset form
         function resetForm() {
             document.getElementById('productForm').reset();
-            document.getElementById('image-preview').style.display = 'none';
+            const preview = document.getElementById('image-preview');
+            if (preview) preview.style.display = 'none';
             document.getElementById('discounted-price').textContent = '0 ₫';
             calculateDiscountedPrice();
         }
 
         // Initialize on page load
         window.addEventListener('load', () => {
-            console.log('Page loaded, initializing price calculation');
+            console.log('Window load event triggered');
+            
+            // Test calculate immediately
             calculateDiscountedPrice();
             
             // Add real-time calculation on input change
@@ -456,12 +465,23 @@ if ($result) {
             const discountInput = document.getElementById('discount_percent');
             
             if (priceInput) {
-                priceInput.addEventListener('input', calculateDiscountedPrice);
+                priceInput.addEventListener('input', () => {
+                    console.log('Price input changed');
+                    calculateDiscountedPrice();
+                });
                 console.log('Price input listener added');
+            } else {
+                console.error('Price input element not found');
             }
+            
             if (discountInput) {
-                discountInput.addEventListener('input', calculateDiscountedPrice);
+                discountInput.addEventListener('input', () => {
+                    console.log('Discount input changed');
+                    calculateDiscountedPrice();
+                });
                 console.log('Discount input listener added');
+            } else {
+                console.error('Discount input element not found');
             }
         });
 
