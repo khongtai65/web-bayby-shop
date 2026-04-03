@@ -719,7 +719,7 @@ h3 { font-size: 0.95rem; }
 }
 
 .popup-overlay {
-    display: none;
+    display: none !important;
     position: fixed;
     top: 0;
     left: 0;
@@ -730,11 +730,12 @@ h3 { font-size: 0.95rem; }
 }
 
 .popup-overlay.active {
-    display: block;
+    display: block !important;
 }
 
 /* Popup Menu Sliding */
 .popup-menu {
+    display: block !important;
     position: fixed !important;
     left: -300px !important;
     top: 65px !important;

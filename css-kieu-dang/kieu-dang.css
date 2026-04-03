@@ -1279,13 +1279,25 @@ h2 {
     }
 }
 
-/* ===== POPUP MENU (HIDE ON DESKTOP) ===== */
-.popup-overlay {
-    display: none !important;
+/* ===== POPUP MENU ===== */
+@media (max-width: 768px) {
+    .popup-overlay {
+        display: block !important;
+    }
+    
+    .popup-menu {
+        display: block !important;
+    }
 }
 
-.popup-menu {
-    display: none !important;
+@media (min-width: 769px) {
+    .popup-overlay {
+        display: none !important;
+    }
+    
+    .popup-menu {
+        display: none !important;
+    }
 }
 
 /* Footer */
