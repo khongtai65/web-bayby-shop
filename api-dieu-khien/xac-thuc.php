@@ -1,13 +1,16 @@
 <?php
-ob_clean();
 require_once '../config.php';
 
 // Danh sách từ khiếm nhã
 $blocked_words = ['admin', 'root', 'fuck', 'ass', 'shit', 'damn', 'crap'];
 
-// Hàm mã hóa mật khẩu
+// ===== PASSWORD HASHING (Using bcrypt instead of MD5) =====
 function hashPassword($password) {
-    return md5($password);
+    return password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+}
+
+function verifyPassword($password, $hash) {
+    return password_verify($password, $hash);
 }
 
 // Hàm validate mật khẩu
@@ -16,13 +19,13 @@ function validatePassword($password) {
         return "Mật khẩu tối thiểu 6 ký tự";
     }
 
-    if (strlen($password) > 12) {
-        return "Mật khẩu tối đa 12 ký tự";
+    if (strlen($password) > 100) {
+        return "Mật khẩu tối dài 100 ký tự";
     }
     
-    // Chỉ cho phép chữ, số, @, &
-    if (!preg_match('/^[a-zA-Z0-9@&]*$/', $password)) {
-        return "Mật khẩu chỉ được chứa chữ, số, @, &";
+    // Chỉ cho phép chữ, số, @, &, -, _, .
+    if (!preg_match('/^[a-zA-Z0-9@&._-]*$/', $password)) {
+        return "Mật khẩu chỉ được chứa chữ, số, @, &, -, _, .";
     }
     
     return true;
@@ -36,8 +39,8 @@ function validateUsername($username) {
         return "Tên đăng nhập tối thiểu 6 ký tự";
     }
     
-    if (strlen($username) > 12) {
-        return "Tên đăng nhập tối đa 12 ký tự";
+    if (strlen($username) > 20) {
+        return "Tên đăng nhập tối đa 20 ký tự";
     }
     
     // Kiểm tra từ khiếm nhã
@@ -57,41 +60,60 @@ function validateUsername($username) {
 
 // LOGIN
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'login') {
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $remember = isset($_POST['remember']) ? 1 : 0;
-    
-    if (!$username || !$password) {
-        $_SESSION['login_error'] = 'Tên đăng nhập và mật khẩu không được để trống';
-        header('Location: ../tai-khoan.php');
-        exit;
-    }
-    
-    $password_hash = hashPassword($password);
-    $sql = "SELECT id, username, name, full_name, phone FROM users WHERE username = ? AND password = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $password_hash);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    
-    if ($user) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['full_name'] = $user['full_name'];
-        $_SESSION['user_phone'] = $user['phone'];
-        
-        // Remember me
-        if ($remember) {
-            setcookie('user_id', $user['id'], time() + (30 * 24 * 60 * 60), '/'); // 30 ngày
-            setcookie('username', $user['username'], time() + (30 * 24 * 60 * 60), '/');
+    try {
+        if (!checkRateLimit('login_' . ($_POST['username'] ?? ''), 5)) {
+            $_SESSION['login_error'] = 'Quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau 1 giờ.';
+            header('Location: ../tai-khoan.php');
+            exit;
         }
         
-        header('Location: ../tai-khoan.php');
-        exit;
-    } else {
-        $_SESSION['login_error'] = '❌ Tên đăng nhập hoặc mật khẩu không đúng';
+        $username = sanitizeInput(trim($_POST['username'] ?? ''));
+        $password = $_POST['password'] ?? '';
+        $remember = isset($_POST['remember']) && $_POST['remember'] === '1' ? 1 : 0;
+        
+        if (!$username || !$password) {
+            $_SESSION['login_error'] = 'Tên đăng nhập và mật khẩu không được để trống';
+            header('Location: ../tai-khoan.php');
+            exit;
+        }
+        
+        $sql = "SELECT id, username, name, full_name, phone, password FROM users WHERE username = ? LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception('Prepare failed');
+        }
+        $stmt->bind_param("s", $username);
+        if (!$stmt->execute()) {
+            throw new Exception('Execute failed');
+        }
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        
+        if ($user && verifyPassword($password, $user['password'])) {
+            $_SESSION['user_id'] = (int)$user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['full_name'] = $user['full_name'];
+            $_SESSION['user_phone'] = $user['phone'];
+            $_SESSION['role'] = 'user'; // default role
+            
+            // Remember me (secure cookies)
+            if ($remember) {
+                setcookie('remember_token', bin2hex(random_bytes(32)), 
+                    time() + (30 * 24 * 60 * 60), 
+                    '/', '', false, true); // httponly=true
+            }
+            
+            header('Location: ../tai-khoan.php');
+            exit;
+        } else {
+            $_SESSION['login_error'] = '❌ Tên đăng nhập hoặc mật khẩu không đúng';
+            header('Location: ../tai-khoan.php');
+            exit;
+        }
+    } catch (Exception $e) {
+        error_log("Login error: " . $e->getMessage());
+        $_SESSION['login_error'] = '❌ Lỗi đăng nhập. Vui lòng thử lại.';
         header('Location: ../tai-khoan.php');
         exit;
     }
