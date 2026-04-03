@@ -362,3 +362,45 @@ async function loadUserOrders() {
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
 });
+
+// ===== DRAWER MENU FUNCTIONS =====
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const drawerMenu = document.getElementById('drawerMenu');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+    
+    if (!menuToggle) return;
+    
+    // Toggle drawer menu
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        drawerMenu.classList.toggle('active');
+        drawerOverlay.classList.toggle('active');
+    });
+    
+    // Close drawer when clicking backdrop
+    drawerOverlay.addEventListener('click', function() {
+        menuToggle.classList.remove('active');
+        drawerMenu.classList.remove('active');
+        drawerOverlay.classList.remove('active');
+    });
+    
+    // Close drawer when clicking a link
+    drawerLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            menuToggle.classList.remove('active');
+            drawerMenu.classList.remove('active');
+            drawerOverlay.classList.remove('active');
+        });
+    });
+    
+    // Close drawer on window resize (when viewport becomes large)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            menuToggle.classList.remove('active');
+            drawerMenu.classList.remove('active');
+            drawerOverlay.classList.remove('active');
+        }
+    });
+});

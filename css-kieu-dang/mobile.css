@@ -116,9 +116,7 @@ body {
 }
 
 .social-links {
-    display: flex;
-    gap: 0.3rem;
-    align-items: center;
+    display: none;
 }
 
 .social-btn {
@@ -204,11 +202,22 @@ body {
 }
 
 .menu-toggle {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    z-index: 102;
 }
 
 .category-menu {
-    display: flex;
+    display: none;
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
@@ -580,6 +589,166 @@ h3 { font-size: 0.95rem; }
 
 .filter-section {
     padding: 1rem 0.5rem;
+}
+
+/* ===== DRAWER MENU (MOBILE) ===== */
+.navbar {
+    position: relative;
+}
+
+.nav-container {
+    display: flex;
+    position: relative;
+}
+
+/* Drawer Overlay Background */
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Drawer Sidebar */
+.drawer-menu {
+    position: fixed;
+    left: 0;
+    top: 65px;
+    width: 75%;
+    max-width: 300px;
+    height: calc(100vh - 65px);
+    background: linear-gradient(180deg, #4734353b 0%, #301d23 100%);
+    z-index: 101;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer-menu.active {
+    transform: translateX(0);
+}
+
+.drawer-section {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.drawer-section:last-child {
+    border-bottom: none;
+    margin-top: auto;
+}
+
+.drawer-section h3 {
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-link {
+    display: block;
+    padding: 0.8rem;
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+}
+
+.drawer-link:active,
+.drawer-link:hover {
+    background-color: rgba(255,255,255,0.1);
+    border-left-color: #FFB6C1;
+    padding-left: 1.2rem;
+}
+
+/* Drawer Social Buttons */
+.drawer-social {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.drawer-social a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 1.2rem;
+}
+
+.drawer-social a.zalo {
+    background-color: #0084FF;
+}
+
+.drawer-social a.facebook {
+    background-color: #1877F2;
+}
+
+.drawer-social a.messenger {
+    background-color: #00B2FF;
+}
+
+.drawer-social a:active {
+    transform: scale(0.95);
+}
+
+/* Support Section */
+.drawer-support {
+    color: #FFB6C1;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.drawer-support strong {
+    display: block;
+    color: #FF69B4;
+    margin-bottom: 0.4rem;
+}
+
+/* Menu Hamburger Icon */
+.menu-toggle span {
+    width: 16px;
+    height: 2px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
 }
 
 .filter-controls {

@@ -52,10 +52,16 @@ session_start();
     </div>
 
     <!-- Navigation Menu -->
+    <!-- Navigation Menu -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="category-menu">
-                <a href="cua-hang.php" class="category-link">📋 DANH MỤC MENU</a>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="category-menu" id="categoryMenu">
+                <a href="trang-chu.php" class="category-link">🏠 TRANG CHỦ</a>
                 <a href="cua-hang.php?category=0-3" class="category-link">0-3 THÁNG</a>
                 <a href="cua-hang.php?category=3-6" class="category-link">3-6 THÁNG</a>
                 <a href="cua-hang.php?category=6-12" class="category-link">6-12 THÁNG</a>
@@ -63,6 +69,39 @@ session_start();
             </div>
         </div>
     </nav>
+
+    <!-- Drawer Menu Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- Drawer Menu -->
+    <div class="drawer-menu" id="drawerMenu">
+        <div class="drawer-section">
+            <h3>DANH MỤC</h3>
+            <a href="trang-chu.php" class="drawer-link">🏠 Trang chủ</a>
+            <a href="cua-hang.php?category=0-3" class="drawer-link">0-3 Tháng</a>
+            <a href="cua-hang.php?category=3-6" class="drawer-link">3-6 Tháng</a>
+            <a href="cua-hang.php?category=6-12" class="drawer-link">6-12 Tháng</a>
+            <a href="cua-hang.php?category=phu-kien" class="drawer-link">Phụ kiện</a>
+        </div>
+        
+        <div class="drawer-section">
+            <h3>LIÊN HỆ</h3>
+            <div class="drawer-social">
+                <a href="https://zalo.me/0866021711" class="zalo" title="Zalo" target="_blank">📱</a>
+                <a href="https://www.facebook.com/profile.php?id=61580260876532" class="facebook" title="Facebook" target="_blank">f</a>
+                <a href="https://www.facebook.com/profile.php?id=61580260876532" class="messenger" title="Messenger" target="_blank">💬</a>
+            </div>
+        </div>
+
+        <div class="drawer-section">
+            <h3>🔔 HỖ TRỢ 24/7</h3>
+            <div class="drawer-support">
+                <strong>Liên hệ:</strong>
+                <span>📞 0866.021.711</span><br>
+                <span>Thứ 2 - Thứ 7 (Trừ lễ)</span>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <h1>🛒 Giỏ Hàng</h1>

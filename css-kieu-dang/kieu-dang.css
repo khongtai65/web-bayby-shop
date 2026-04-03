@@ -1279,6 +1279,19 @@ h2 {
     }
 }
 
+/* ===== DRAWER MENU (HIDE ON DESKTOP) ===== */
+.drawer-overlay {
+    display: none !important;
+}
+
+.drawer-menu {
+    display: none !important;
+}
+
+.menu-toggle {
+    display: none !important;
+}
+
 /* Footer */
 .footer {
     background-color: #2C3E3D;
