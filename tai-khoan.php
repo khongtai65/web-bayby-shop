@@ -1,7 +1,5 @@
 <?php
 session_start();
-require_once 'includes/device-detect.php';
-$cssFile = getCSSFile();
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,7 +7,8 @@ $cssFile = getCSSFile();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tài Khoản - Shop Mẹ và Bé Đông Lan</title>
-    <link rel="stylesheet" href="<?php echo $cssFile; ?>">
+    <link rel="stylesheet" href="css-kieu-dang/kieu-dang.css">
+    <link rel="stylesheet" href="css-kieu-dang/mobile.css" media="(max-width: 768px)">
     <link rel="stylesheet" href="css/social-icons.css">
     <link rel="stylesheet" href="css/search.css">
     <style>
