@@ -405,12 +405,7 @@ if ($result) {
                 const discountInput = document.getElementById('discount_percent');
                 const resultSpan = document.getElementById('discounted-price');
                 
-                console.log('Price input:', priceInput?.value);
-                console.log('Discount input:', discountInput?.value);
-                console.log('Result span exists:', !!resultSpan);
-                
                 if (!priceInput || !discountInput || !resultSpan) {
-                    console.error('Missing elements');
                     return;
                 }
                 
@@ -418,8 +413,9 @@ if ($result) {
                 const discountPercent = parseFloat(discountInput.value) || 0;
                 const discountedPrice = price - (price * discountPercent / 100);
                 
-                const formatted = discountedPrice.toLocaleString('vi-VN');
-                console.log('Calculated price:', formatted);
+                // Format to 0 decimal places
+                const formatted = Math.round(discountedPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                console.log('Price:', price, 'Discount:', discountPercent, 'Final:', discountedPrice, 'Formatted:', formatted);
                 
                 resultSpan.textContent = formatted + ' ₫';
             } catch (error) {
