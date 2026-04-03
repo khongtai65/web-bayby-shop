@@ -48,7 +48,8 @@ if (!isset($_SESSION['user_id'])) {
                 <a href="tai-khoan.php" class="header-icon-btn" title="Tài khoản">
                     <span>👤</span>
                 </a>
-                <a href="gio-hang.php" class="header-icon-btn" title="Giỏ hàng">
+                <a href="gio-hang.php" class="header-icon-btn cart-btn" title="Giỏ hàng">
+                    <span>🛒</span>
                     <span class="icon-badge" id="cart-count">0</span>
                 </a>
             </div>
