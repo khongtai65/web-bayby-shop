@@ -103,12 +103,50 @@ body {
     flex: 0 0 auto;
 }
 
+/* ===== STICKY SIDEBAR (Mobile) ===== */
 .hotline-section {
     display: none;
 }
 
 .social-links {
     display: none;
+}
+
+/* Sticky contact bar on mobile */
+@supports (position: sticky) {
+    .hotline-section,
+    .social-links {
+        display: none !important;
+    }
+    
+    /* Create sticky contact sidebar */
+    body::after {
+        content: '';
+        position: fixed;
+        right: 0;
+        top: 65px;
+        width: 50px;
+        height: calc(100vh - 65px);
+        background: linear-gradient(180deg, #DC143C 0%, #FF69B4 100%);
+        z-index: 99;
+    }
+}
+
+/* If we need to add via CSS, use this approach */
+.sticky-contact {
+    position: fixed;
+    right: 0;
+    top: 65px;
+    width: 48px;
+    height: auto;
+    background: linear-gradient(180deg, #DC143C 0%, #FF69B4 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 0.4rem;
+    z-index: 99;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
 }
 
 .header-icon-btn {
@@ -610,6 +648,99 @@ h3 { font-size: 0.95rem; }
 }
 
 .category-menu::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+}
+
+/* ===== STICKY CONTACT BAR ===== */
+.sticky-contact {
+    position: fixed;
+    right: 0;
+    top: 65px;
+    width: 50px;
+    max-height: calc(100vh - 65px);
+    background: linear-gradient(180deg, rgba(220, 20, 60, 0.95) 0%, rgba(255, 105, 180, 0.95) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 0.4rem;
+    z-index: 98;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.25);
+    border-radius: 8px 0 0 8px;
+    overflow-y: auto;
+}
+
+.sticky-btn {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    background-color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+
+.sticky-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.sticky-hotline {
+    background: linear-gradient(135deg, #DC143C, #FF69B4);
+    color: white;
+    font-size: 0.65rem;
+    line-height: 1;
+    padding: 0.4rem;
+}
+
+.sticky-hotline small {
+    display: block;
+    font-size: 0.5rem;
+    margin-top: 0.2rem;
+}
+
+.sticky-zalo {
+    background-color: #0084FF;
+    color: white;
+    font-weight: bold;
+}
+
+.sticky-facebook {
+    background-color: #1877F2;
+    color: white;
+    font-weight: bold;
+}
+
+.sticky-messenger {
+    background-color: #0084FF;
+    color: white;
+    font-weight: bold;
+}
+
+.sticky-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Hide scrollbar for sticky contact */
+.sticky-contact::-webkit-scrollbar {
+    width: 3px;
+}
+
+.sticky-contact::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sticky-contact::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.3);
     border-radius: 2px;
 }

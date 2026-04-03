@@ -123,6 +123,7 @@ if (!isset($_SESSION['user_id'])) {
     <script src="js-kiem-soat/chinh.js"></script>
     <script src="js-kiem-soat/header-scroll.js"></script>
     <script src="js-kiem-soat/search.js"></script>
+    <script src="js-kiem-soat/sticky-contact.js"></script>
     <script>
     loadCheckout();
     </script>
