@@ -38,6 +38,9 @@ if ($conn->connect_error) {
 // Set charset to utf8
 $conn->set_charset("utf8");
 
+// Set timezone to Vietnam
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
 // ===== HELPER FUNCTIONS =====
 
 // Secure JSON response

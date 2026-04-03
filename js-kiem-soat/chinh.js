@@ -134,7 +134,7 @@ function createProductCard(product) {
 // View product detail
 async function viewProductDetail(productId) {
     try {
-        const response = await fetch(`${API_BASE}/san-pham.php?id=${productId}`);
+        const response = await fetch(`./api-dieu-khien/san-pham.php?id=${productId}`);
         const data = await response.json();
         
         if (data.status === 'success') {
@@ -153,6 +153,9 @@ async function viewProductDetail(productId) {
 function showProductDetailModal(product) {
     const discount_percent = product.discount_percent || 0;
     const final_price = product.price * (1 - discount_percent / 100);
+    
+    // Format created date
+    const createdDate = product.created_at ? new Date(product.created_at).toLocaleString('vi-VN') : 'N/A';
     
     const modal = document.createElement('div');
     modal.id = 'product-detail-modal';
@@ -188,9 +191,10 @@ function showProductDetailModal(product) {
                 
                 <!-- Thông tin sản phẩm -->
                 <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Danh mục -->
+                    <!-- Danh mục và ngày tạo -->
                     <div style="color: #666; font-size: 0.9rem;">
-                        📦 Danh mục: <strong>${product.category || 'N/A'}</strong>
+                        <div>📦 Danh mục: <strong>${product.category || 'N/A'}</strong></div>
+                        <div>📅 Ngày tạo: <strong>${createdDate}</strong></div>
                     </div>
                     
                     <!-- Giá -->
