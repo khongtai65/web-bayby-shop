@@ -90,7 +90,7 @@ session_start();
 
     <!-- Navigation Menu -->
     <nav class="main-nav">
-        <a href="trang-chu.php" class="nav-link active">🏠 TRANG CHỦ</a>
+        <a href="trang-chu.php" class="nav-link active">TRANG CHỦ</a>
         <a href="cua-hang.php?category=0-3" class="nav-link">0-3 THÁNG</a>
         <a href="cua-hang.php?category=3-6" class="nav-link">3-6 THÁNG</a>
         <a href="cua-hang.php?category=6-12" class="nav-link">6-12 THÁNG</a>
@@ -147,6 +147,9 @@ session_start();
     <script src="js-kiem-soat/search.js"></script>
     <script src="js-kiem-soat/sticky-contact.js"></script>
     <script>
+    // Highlight active nav link
+    highlightActiveNavLink();
+    
     // Load featured products
     loadFeaturedProducts();
     

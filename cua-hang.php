@@ -92,7 +92,7 @@ session_start();
 
     <!-- Navigation Menu -->
     <nav class="main-nav">
-        <a href="trang-chu.php" class="nav-link">🏠 TRANG CHỦ</a>
+        <a href="trang-chu.php" class="nav-link">TRANG CHỦ</a>
         <a href="cua-hang.php?category=0-3" class="nav-link">0-3 THÁNG</a>
         <a href="cua-hang.php?category=3-6" class="nav-link">3-6 THÁNG</a>
         <a href="cua-hang.php?category=6-12" class="nav-link">6-12 THÁNG</a>
@@ -134,6 +134,9 @@ session_start();
     <script src="js-kiem-soat/search.js"></script>
     <script src="js-kiem-soat/sticky-contact.js"></script>
     <script>
+    // Highlight active nav link
+    highlightActiveNavLink();
+    
     // WHO Growth Standards - Cân nặng trung bình theo độ tuổi
     const weightData = {
         '0-3': {
@@ -215,6 +218,8 @@ session_start();
 
     // Load initial filters from URL
     document.addEventListener('DOMContentLoaded', function() {
+        highlightActiveNavLink();
+        
         const urlParams = new URLSearchParams(window.location.search);
         const category = urlParams.get('category') || '';
         const gender = urlParams.get('gender') || '';

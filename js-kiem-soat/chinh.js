@@ -1,6 +1,29 @@
 // ===== CONFIGURATION =====
 const API_BASE = './api-dieu-khien';
 
+// ===== HIGHLIGHT ACTIVE NAV LINK =====
+function highlightActiveNavLink() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.php';
+    const currentURL = window.location.href;
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        
+        // Highlight "TRANG CHỦ" on homepage
+        if ((currentPage === 'trang-chu.php' || currentPage === '') && link.href.includes('trang-chu.php')) {
+            link.classList.add('active');
+        }
+        // Highlight category links on shop page
+        else if (currentURL.includes(link.href.split('?')[1])) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', highlightActiveNavLink);
+
 // ===== CHECK LOGIN =====
 async function checkLogin() {
     try {

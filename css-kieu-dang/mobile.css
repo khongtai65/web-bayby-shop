@@ -18,7 +18,7 @@ body {
 /* Main Navigation Menu - Mobile */
 .main-nav {
     display: flex !important;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     gap: 0 !important;
     background: linear-gradient(90deg, #8B7355 0%, #6B5345 100%) !important;
@@ -27,18 +27,20 @@ body {
     top: 65px;
     z-index: 99;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .nav-link {
     color: white !important;
     text-decoration: none !important;
-    padding: 0.7rem 0.8rem !important;
-    font-weight: 600 !important;
-    font-size: 0.75rem !important;
-    border-right: 1px solid rgba(255,255,255,0.2) !important;
+    padding: 0.9rem 1rem !important;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    border-right: 1px solid rgba(255,255,255,0.25) !important;
     flex-shrink: 0;
     transition: all 0.3s ease !important;
     white-space: nowrap;
+    letter-spacing: 0.2px;
 }
 
 .nav-link:last-child {
@@ -46,7 +48,7 @@ body {
 }
 
 .nav-link:active {
-    background-color: rgba(255,255,255,0.2) !important;
+    background-color: rgba(255,255,255,0.15) !important;
 }
 
 .nav-link.active {
