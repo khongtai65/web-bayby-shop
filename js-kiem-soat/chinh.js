@@ -361,21 +361,30 @@ async function loadUserOrders() {
 // ===== PAGE LOAD =====
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
+    initPopupMenu();
 });
 
 // ===== POPUP MENU FUNCTIONS =====
-document.addEventListener('DOMContentLoaded', function() {
+function initPopupMenu() {
     const menuToggle = document.getElementById('menuToggle');
     const popupMenu = document.getElementById('popupMenu');
     const popupOverlay = document.getElementById('popupOverlay');
     const popupClose = document.getElementById('popupClose');
     const popupLinks = document.querySelectorAll('.popup-link');
     
-    if (!menuToggle || !popupMenu) return;
+    // Debug: Check if elements exist
+    if (!menuToggle || !popupMenu) {
+        console.warn('Popup menu elements not found');
+        return;
+    }
+    
+    console.log('Popup menu initialized');
     
     // Toggle popup menu
     menuToggle.addEventListener('click', function(e) {
         e.stopPropagation();
+        e.preventDefault();
+        console.log('Menu button clicked');
         popupMenu.classList.toggle('active');
         popupOverlay.classList.toggle('active');
     });
@@ -407,4 +416,4 @@ document.addEventListener('DOMContentLoaded', function() {
             popupOverlay.classList.remove('active');
         }
     });
-});
+}
