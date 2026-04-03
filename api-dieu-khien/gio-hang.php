@@ -1,4 +1,5 @@
 <?php
+ob_clean();
 require_once '../config.php';
 
 // GET: Lấy giỏ hàng của user

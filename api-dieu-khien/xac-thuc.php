@@ -1,4 +1,5 @@
 <?php
+ob_clean();
 require_once '../config.php';
 
 // Danh sách từ khiếm nhã

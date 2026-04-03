@@ -15,6 +15,11 @@ body {
     font-size: 14px;
 }
 
+/* Hide body overflow when popup active to prevent scrolling */
+body.popup-active {
+    overflow: hidden !important;
+}
+
 .container {
     max-width: 100%;
     margin: 0 auto;
@@ -29,7 +34,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 101;
+    z-index: 50;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -109,6 +114,10 @@ body {
     gap: 0.4rem;
     flex: 0 0 auto;
     order: 2;
+}
+
+.header-right .menu-toggle {
+    display: flex !important;
 }
 
 .hotline-section {
@@ -196,7 +205,7 @@ body {
 }
 
 .menu-toggle {
-    display: flex;
+    display: none !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -696,9 +705,9 @@ h3 { font-size: 0.95rem; }
 
 /* ===== POPUP MENU (MOBILE) ===== */
 .menu-toggle {
+    display: none !important;
     width: 32px;
     height: 32px;
-    display: flex !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -708,6 +717,13 @@ h3 { font-size: 0.95rem; }
     cursor: pointer;
     padding: 0;
     flex-shrink: 0;
+}
+
+.header-right .menu-toggle {
+    display: flex !important;
+    width: 36px;
+    height: 36px;
+    gap: 4px;
 }
 
 .menu-toggle span {
@@ -725,12 +741,14 @@ h3 { font-size: 0.95rem; }
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    z-index: 99;
+    background-color: #000000 !important;
+    z-index: 98 !important;
 }
 
 .popup-overlay.active {
     display: block !important;
+    opacity: 1 !important;
+    z-index: 98 !important;
 }
 
 /* Popup Menu Sliding */
@@ -738,14 +756,15 @@ h3 { font-size: 0.95rem; }
     display: block !important;
     position: fixed !important;
     left: -300px !important;
-    top: 65px !important;
+    top: 0 !important;
     width: 280px !important;
-    height: calc(100vh - 65px) !important;
-    background: linear-gradient(180deg, #4734353b 0%, #301d23 100%) !important;
+    height: 100vh !important;
+    background: linear-gradient(180deg, #DC143C 0%, #8B0000 100%) !important;
     z-index: 100 !important;
     overflow-y: auto !important;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.3) !important;
+    box-shadow: 4px 0 12px rgba(0,0,0,0.6) !important;
     transition: left 0.3s ease !important;
+    padding-top: 0 !important;
 }
 
 .popup-menu.active {
@@ -756,9 +775,12 @@ h3 { font-size: 0.95rem; }
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: linear-gradient(90deg, #DC143C 0%, #C41E3A 100%);
+    padding: 1.2rem;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    background: linear-gradient(90deg, #8B0000 0%, #DC143C 100%);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .popup-header h3 {
@@ -771,14 +793,19 @@ h3 { font-size: 0.95rem; }
     background: none;
     border: none;
     color: white;
-    font-size: 1.5rem;
+    font-size: 2rem;
     cursor: pointer;
     padding: 0;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
+}
+
+.popup-close:active {
+    transform: scale(0.9);
 }
 
 .popup-section {

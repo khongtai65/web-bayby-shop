@@ -387,18 +387,21 @@ function initPopupMenu() {
         console.log('Menu button clicked');
         popupMenu.classList.toggle('active');
         popupOverlay.classList.toggle('active');
+        document.body.classList.toggle('popup-active');
     });
     
     // Close popup when clicking close button
     popupClose.addEventListener('click', function() {
         popupMenu.classList.remove('active');
         popupOverlay.classList.remove('active');
+        document.body.classList.remove('popup-active');
     });
     
     // Close popup when clicking overlay
     popupOverlay.addEventListener('click', function() {
         popupMenu.classList.remove('active');
         popupOverlay.classList.remove('active');
+        document.body.classList.remove('popup-active');
     });
     
     // Close popup when clicking a link
@@ -406,6 +409,7 @@ function initPopupMenu() {
         link.addEventListener('click', function() {
             popupMenu.classList.remove('active');
             popupOverlay.classList.remove('active');
+            document.body.classList.remove('popup-active');
         });
     });
     
@@ -414,6 +418,7 @@ function initPopupMenu() {
         if (!popupMenu.contains(e.target) && !menuToggle.contains(e.target)) {
             popupMenu.classList.remove('active');
             popupOverlay.classList.remove('active');
+            document.body.classList.remove('popup-active');
         }
     });
 }
