@@ -1,6 +1,37 @@
 // ===== CONFIGURATION =====
 const API_BASE = './api-dieu-khien';
 
+// ===== CHECK LOGIN =====
+async function checkLogin() {
+    try {
+        // Check nếu user_id có trong document (được set bởi server)
+        const response = await fetch(`${API_BASE}/xac-thuc.php?action=checkLogin`);
+        const data = await response.json();
+        return data.status === 'success';
+    } catch (error) {
+        console.error('Error checking login:', error);
+        return false;
+    }
+}
+
+// Hiện modal đăng nhập/đăng ký
+function showLoginModal() {
+    const modal = document.getElementById('login-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Đóng modal
+function closeLoginModal() {
+    const modal = document.getElementById('login-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
 // ===== HELPER FUNCTIONS =====
 function formatPrice(price) {
     return new Intl.NumberFormat('vi-VN', {
@@ -95,6 +126,13 @@ function filterByCategory() {
 // Add to cart
 async function addToCart(productId) {
     try {
+        // Check login trước
+        const isLoggedIn = await checkLogin();
+        if (!isLoggedIn) {
+            showLoginModal();
+            return;
+        }
+        
         const quantity = parseInt(document.getElementById(`qty-${productId}`).value);
         
         const response = await fetch(`${API_BASE}/gio-hang.php`, {

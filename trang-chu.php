@@ -161,5 +161,124 @@ session_start();
         });
     }
     </script>
+
+    <!-- Login Modal Popup -->
+    <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 15px; padding: 2rem; width: 90%; max-width: 500px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0; color: #CD853F;">🔐 Đăng Nhập / Đăng Ký</h2>
+                <button onclick="closeLoginModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+
+            <p style="margin: 0 0 1.5rem; color: #666; font-size: 1rem;">
+                ⚠️ Bạn cần đăng nhập hoặc đăng ký để tiếp tục mua hàng
+            </p>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                <button onclick="showLoginTab()" id="btn-login-tab" class="modal-tab-btn active" style="flex: 1; padding: 12px; border: 2px solid #CD853F; background: #CD853F; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                    🔓 Đăng Nhập
+                </button>
+                <button onclick="showRegisterTab()" id="btn-register-tab" class="modal-tab-btn" style="flex: 1; padding: 12px; border: 2px solid #ddd; background: #f5f5f5; color: #333; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                    📝 Đăng Ký
+                </button>
+            </div>
+
+            <!-- Login Tab -->
+            <div id="modal-login-tab" style="display: block;">
+                <form method="POST" action="api-dieu-khien/xac-thuc.php" onsubmit="return validateLoginForm()">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Tên đăng nhập</label>
+                        <input type="text" id="modal-login-username" name="username" required minlength="4" maxlength="12" placeholder="4-12 ký tự" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 1rem;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Mật khẩu</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="password" id="modal-login-password" name="password" required minlength="6" maxlength="16" placeholder="Tối đa 16 ký tự" style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 1rem;">
+                            <button type="button" onclick="togglePasswordVisibility('modal-login-password')" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem;">👁️</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="action" value="login">
+                    <button type="submit" style="width: 100%; padding: 12px; background: #CD853F; color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;">
+                        ✅ Đăng Nhập
+                    </button>
+                </form>
+            </div>
+
+            <!-- Register Tab -->
+            <div id="modal-register-tab" style="display: none;">
+                <form method="POST" action="api-dieu-khien/xac-thuc.php" onsubmit="return validateRegisterForm()">
+                    <div style="margin-bottom: 0.8rem;">
+                        <label style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem;">Tên đăng nhập</label>
+                        <input type="text" id="modal-register-username" name="username" required minlength="4" maxlength="12" placeholder="4-12 ký tự" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 0.95rem;">
+                    </div>
+                    <div style="margin-bottom: 0.8rem;">
+                        <label style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem;">Họ và tên</label>
+                        <input type="text" id="modal-register-fullname" name="full_name" required placeholder="VD: Nguyễn Văn A" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 0.95rem;">
+                    </div>
+                    <div style="margin-bottom: 0.8rem;">
+                        <label style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem;">Tên gọi</label>
+                        <input type="text" id="modal-register-name" name="name" required placeholder="VD: Nguyễn" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 0.95rem;">
+                    </div>
+                    <div style="margin-bottom: 0.8rem;">
+                        <label style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem;">Mật khẩu</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="password" id="modal-register-password" name="password" required minlength="6" maxlength="16" placeholder="Tối đa 16 ký tự" style="width: 100%; padding: 8px; padding-right: 40px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 0.95rem;">
+                            <button type="button" onclick="togglePasswordVisibility('modal-register-password')" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1rem;">👁️</button>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 0.8rem;">
+                        <label style="display: block; margin-bottom: 0.3rem; font-weight: bold; font-size: 0.9rem;">Số điện thoại</label>
+                        <input type="tel" name="phone" placeholder="0901234567" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 0.95rem;">
+                    </div>
+                    <input type="hidden" name="action" value="register">
+                    <button type="submit" style="width: 100%; padding: 10px; background: #CD853F; color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;">
+                        ✅ Đăng Ký
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show/Hide modal tabs
+        function showLoginTab() {
+            document.getElementById('modal-login-tab').style.display = 'block';
+            document.getElementById('modal-register-tab').style.display = 'none';
+            document.getElementById('btn-login-tab').style.background = '#CD853F';
+            document.getElementById('btn-login-tab').style.color = 'white';
+            document.getElementById('btn-login-tab').style.borderColor = '#CD853F';
+            document.getElementById('btn-register-tab').style.background = '#f5f5f5';
+            document.getElementById('btn-register-tab').style.color = '#333';
+            document.getElementById('btn-register-tab').style.borderColor = '#ddd';
+        }
+
+        function showRegisterTab() {
+            document.getElementById('modal-login-tab').style.display = 'none';
+            document.getElementById('modal-register-tab').style.display = 'block';
+            document.getElementById('btn-login-tab').style.background = '#f5f5f5';
+            document.getElementById('btn-login-tab').style.color = '#333';
+            document.getElementById('btn-login-tab').style.borderColor = '#ddd';
+            document.getElementById('btn-register-tab').style.background = '#CD853F';
+            document.getElementById('btn-register-tab').style.color = 'white';
+            document.getElementById('btn-register-tab').style.borderColor = '#CD853F';
+        }
+
+        // Toggle password visibility in modal
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('login-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLoginModal();
+            }
+        });
+    </script>
 </body>
 </html>

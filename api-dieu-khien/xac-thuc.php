@@ -205,3 +205,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['action']) && $_GET['acti
         jsonResponse('error', 'User not found');
     }
 }
+
+// API: Check if user is logged in
+if (isset($_GET['action']) && $_GET['action'] == 'checkLogin') {
+    if (isset($_SESSION['user_id'])) {
+        jsonResponse('success', 'User is logged in');
+    } else {
+        jsonResponse('error', 'Not logged in');
+    }
+}
