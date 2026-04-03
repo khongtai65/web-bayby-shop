@@ -90,6 +90,15 @@ session_start();
     <!-- Popup Overlay -->
     <div class="popup-overlay" id="popupOverlay"></div>
 
+    <!-- Navigation Menu -->
+    <nav class="main-nav">
+        <a href="trang-chu.php" class="nav-link">🏠 TRANG CHỦ</a>
+        <a href="cua-hang.php?category=0-3" class="nav-link">0-3 THÁNG</a>
+        <a href="cua-hang.php?category=3-6" class="nav-link">3-6 THÁNG</a>
+        <a href="cua-hang.php?category=6-12" class="nav-link">6-12 THÁNG</a>
+        <a href="cua-hang.php?category=phu-kien" class="nav-link">PHỤ KIỆN</a>
+    </nav>
+
     <div class="container">
         <div class="filter-section">
             <h2>🛍️ Cửa Hàng</h2>
