@@ -400,11 +400,31 @@ if ($result) {
     <script>
         // Tính giá sau giảm
         function calculateDiscountedPrice() {
-            const price = parseFloat(document.getElementById('price').value) || 0;
-            const discountPercent = parseFloat(document.getElementById('discount_percent').value) || 0;
-            const discountedPrice = price - (price * discountPercent / 100);
-            document.getElementById('discounted-price').textContent = 
-                parseFloat(discountedPrice).toLocaleString('vi-VN') + ' ₫';
+            try {
+                const priceInput = document.getElementById('price');
+                const discountInput = document.getElementById('discount_percent');
+                const resultSpan = document.getElementById('discounted-price');
+                
+                console.log('Price input:', priceInput?.value);
+                console.log('Discount input:', discountInput?.value);
+                console.log('Result span exists:', !!resultSpan);
+                
+                if (!priceInput || !discountInput || !resultSpan) {
+                    console.error('Missing elements');
+                    return;
+                }
+                
+                const price = parseFloat(priceInput.value) || 0;
+                const discountPercent = parseFloat(discountInput.value) || 0;
+                const discountedPrice = price - (price * discountPercent / 100);
+                
+                const formatted = discountedPrice.toLocaleString('vi-VN');
+                console.log('Calculated price:', formatted);
+                
+                resultSpan.textContent = formatted + ' ₫';
+            } catch (error) {
+                console.error('Error in calculateDiscountedPrice:', error);
+            }
         }
 
         // Xem trước ảnh
@@ -431,12 +451,22 @@ if ($result) {
         }
 
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('load', () => {
+            console.log('Page loaded, initializing price calculation');
             calculateDiscountedPrice();
             
             // Add real-time calculation on input change
-            document.getElementById('price').addEventListener('input', calculateDiscountedPrice);
-            document.getElementById('discount_percent').addEventListener('input', calculateDiscountedPrice);
+            const priceInput = document.getElementById('price');
+            const discountInput = document.getElementById('discount_percent');
+            
+            if (priceInput) {
+                priceInput.addEventListener('input', calculateDiscountedPrice);
+                console.log('Price input listener added');
+            }
+            if (discountInput) {
+                discountInput.addEventListener('input', calculateDiscountedPrice);
+                console.log('Discount input listener added');
+            }
         });
 
         // Submit form thêm sản phẩm
