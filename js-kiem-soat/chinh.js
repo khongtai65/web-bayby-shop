@@ -19,6 +19,7 @@ function showLoginModal() {
     const modal = document.getElementById('login-modal');
     if (modal) {
         modal.style.display = 'flex';
+        modal.style.pointerEvents = 'auto';
         document.body.style.overflow = 'hidden';
     }
 }
@@ -28,6 +29,7 @@ function closeLoginModal() {
     const modal = document.getElementById('login-modal');
     if (modal) {
         modal.style.display = 'none';
+        modal.style.pointerEvents = 'none';
         document.body.style.overflow = 'auto';
     }
 }
