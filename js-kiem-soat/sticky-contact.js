@@ -23,7 +23,7 @@
         hotnlineBtn.title = 'Gọi hotline';
         hotnlineBtn.innerHTML = '☎️<br><small>0866<br>021<br>711</small>';
         
-        // Social buttons
+        // Zalo button
         const zaloBtn = document.createElement('a');
         zaloBtn.href = 'https://zalo.me/0866021711';
         zaloBtn.target = '_blank';
@@ -31,6 +31,7 @@
         zaloBtn.title = 'Zalo';
         zaloBtn.innerHTML = 'Z';
         
+        // Facebook button
         const facebookBtn = document.createElement('a');
         facebookBtn.href = 'https://www.facebook.com/profile.php?id=61580260876532';
         facebookBtn.target = '_blank';
@@ -38,6 +39,7 @@
         facebookBtn.title = 'Facebook';
         facebookBtn.innerHTML = 'f';
         
+        // Messenger button
         const messengerBtn = document.createElement('a');
         messengerBtn.href = 'https://www.facebook.com/profile.php?id=61580260876532';
         messengerBtn.target = '_blank';
