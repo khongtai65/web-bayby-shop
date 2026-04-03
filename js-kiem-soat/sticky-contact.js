@@ -17,11 +17,12 @@
         stickyBar.className = 'sticky-contact';
         
         // Hotline button
-        const hotnlineBtn = document.createElement('a');
-        hotnlineBtn.href = 'tel:0866021711';
-        hotnlineBtn.className = 'sticky-btn sticky-hotline';
-        hotnlineBtn.title = 'Gọi hotline';
-        hotnlineBtn.innerHTML = '☎️<br><small>0866<br>021<br>711</small>';
+        const hotlineBtn = document.createElement('a');
+        hotlineBtn.href = 'tel:0866021711';
+        hotlineBtn.className = 'sticky-btn sticky-hotline';
+        hotlineBtn.title = 'Gọi hotline';
+        hotlineBtn.textContent = '☎️';
+        hotlineBtn.style.fontSize = '1.3rem';
         
         // Zalo button
         const zaloBtn = document.createElement('a');
@@ -29,7 +30,7 @@
         zaloBtn.target = '_blank';
         zaloBtn.className = 'sticky-btn sticky-zalo';
         zaloBtn.title = 'Zalo';
-        zaloBtn.innerHTML = 'Z';
+        zaloBtn.textContent = 'Z';
         
         // Facebook button
         const facebookBtn = document.createElement('a');
@@ -37,7 +38,7 @@
         facebookBtn.target = '_blank';
         facebookBtn.className = 'sticky-btn sticky-facebook';
         facebookBtn.title = 'Facebook';
-        facebookBtn.innerHTML = 'f';
+        facebookBtn.textContent = 'f';
         
         // Messenger button
         const messengerBtn = document.createElement('a');
@@ -45,16 +46,37 @@
         messengerBtn.target = '_blank';
         messengerBtn.className = 'sticky-btn sticky-messenger';
         messengerBtn.title = 'Messenger';
-        messengerBtn.innerHTML = 'M';
+        messengerBtn.textContent = 'M';
+        
+        // Cart button
+        const cartBtn = document.createElement('a');
+        cartBtn.href = 'gio-hang.php';
+        cartBtn.className = 'sticky-btn sticky-cart';
+        cartBtn.title = 'Giỏ hàng';
+        cartBtn.textContent = '🛒';
+        cartBtn.style.fontSize = '1.2rem';
+        cartBtn.style.position = 'relative';
+        
+        // Add badge to cart
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            const badge = document.createElement('span');
+            badge.className = 'sticky-cart-badge';
+            badge.textContent = cartCount.textContent || '0';
+            cartBtn.appendChild(badge);
+        }
         
         // Append buttons
-        stickyBar.appendChild(hotnlineBtn);
+        stickyBar.appendChild(hotlineBtn);
         stickyBar.appendChild(zaloBtn);
         stickyBar.appendChild(facebookBtn);
         stickyBar.appendChild(messengerBtn);
+        stickyBar.appendChild(cartBtn);
         
         // Add to body
         document.body.appendChild(stickyBar);
+        
+        console.log('Sticky contact bar created');
     }
     
     // Initialize on page load
