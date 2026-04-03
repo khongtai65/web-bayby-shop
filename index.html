@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Shop Mẹ và Bé Đông Lan - Đồ Sơ Sinh Chất Lượng</title>
+    <link rel="stylesheet" href="css-kieu-dang/kieu-dang.css">
+    <link rel="stylesheet" href="css/social-icons.css">
+    <link rel="stylesheet" href="css/search.css">
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="index.html" class="header-logo">
+                    <img src="hinh-anh/logo.png" alt="Logo" class="header-logo-img">
+                </a>
+                <div class="logo-text">
+                    <div class="logo-brand">Shop Mẹ và Bé Đông Lan</div>
+                    <div class="logo-phone">📱 0866.021.711</div>
+                </div>
+            </div>
+            <div class="header-search">
+                <input type="text" placeholder="Bạn cần tìm gì ...?" class="search-input">
+                <button class="search-btn">🔍</button>
+                <div id="search-results"></div>
+            </div>
+            <div class="header-right">
+                <div class="social-links">
+                    <a href="https://zalo.me/0866021711" class="social-btn zalo" title="Zalo" target="_blank"></a>
+                    <a href="https://www.facebook.com/profile.php?id=61580260876532" class="social-btn facebook" title="Facebook" target="_blank"></a>
+                    <a href="https://www.facebook.com/profile.php?id=61580260876532" class="social-btn messenger" title="Messenger" target="_blank"></a>
+                </div>
+                <div class="hotline-section">
+                    <span class="hotline-label">Hotline</span>
+                    <span class="hotline-number">0866.021.711</span>
+                </div>
+                <a href="tai-khoan.html" class="header-icon-btn" title="Tài khoản">
+                    <span>👤</span>
+                </a>
+                <a href="gio-hang.html" class="header-icon-btn" title="Giỏ hàng">
+                    <span class="icon-badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="category-menu">
+                <a href="cua-hang.html" class="category-link">📋 DANH MỤC MENU</a>
+                <a href="cua-hang.html?category=0-3" class="category-link">0-3 THÁNG</a>
+                <a href="cua-hang.html?category=3-6" class="category-link">3-6 THÁNG</a>
+                <a href="cua-hang.html?category=6-12" class="category-link">6-12 THÁNG</a>
+                <a href="cua-hang.html?category=phu-kien" class="category-link">PHỤ KIỆN</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <div class="hero" style="background-image: linear-gradient(135deg, rgba(82, 76, 60, 0.81) 0%, rgba(244,164,96,0.9) 100%);">
+        <div class="hero-content">
+            <h1>Chào mừng đến Shop Mẹ và Bé Đông Lan</h1>
+            <p>Những sản phẩm sơ sinh chất lượng cao, an toàn cho bé yêu</p>
+            <a href="cua-hang.html" class="btn btn-primary">🛍️ Mua Sắm Ngay</a>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <section class="categories">
+        <h2>📦 Danh Mục Sản Phẩm</h2>
+        <div class="category-grid">
+            <div class="category-card" onclick="window.location.href='cua-hang.html?category=sơ-sinh'">
+                <div class="category-icon"><img src="hinh-anh/danh-muc-so-sinh.png" alt="Sơ sinh"></div>
+                <h3>Sơ Sinh (0-3 tháng)</h3>
+            </div>
+            <div class="category-card" onclick="window.location.href='cua-hang.html?category=3-6'">
+                <div class="category-icon"><img src="hinh-anh/danh-muc-3-6-thang.png" alt="3-6 tháng"></div>
+                <h3>3-6 Tháng</h3>
+            </div>
+            <div class="category-card" onclick="window.location.href='cua-hang.html?category=6-12'">
+                <div class="category-icon"><img src="hinh-anh/danh-muc-6-12-thang.png" alt="6-12 tháng"></div>
+                <h3>6-12 Tháng</h3>
+            </div>
+            <div class="category-card" onclick="window.location.href='cua-hang.html?category=trên-1-tuổi'">
+                <div class="category-icon"><img src="hinh-anh/danh-muc-tren-1-tuoi.png" alt="Trên 1 tuổi"></div>
+                <h3>Trên 1 Tuổi</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured">
+        <h2>⭐ Sản Phẩm Nổi Bật</h2>
+        <div id="featured-products" class="product-grid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Shop Mẹ và Bé Đông Lan - Tất cả quyền được bảo lưu</p>
+        <p>Liên hệ: 0866 021 711 | Email: support@babyshop.vn</p>
+    </footer>
+
+    <script src="js-kiem-soat/chinh.js"></script>
+    <script src="js-kiem-soat/header-scroll.js"></script>
+    <script src="js-kiem-soat/search.js"></script>
+    <script>
+    // Load featured products
+    loadFeaturedProducts();
+    </script>
+</body>
+</html>

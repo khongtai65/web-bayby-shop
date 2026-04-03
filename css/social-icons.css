@@ -1,0 +1,48 @@
+/* Social Icons CSS */
+
+.social-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 0.75rem;
+    transition: all 0.3s;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.social-btn.zalo {
+    background-image: url('../hinh-anh/icons/zalo.svg');
+    background-color: #0084FF;
+}
+
+.social-btn.zalo:hover {
+    background-color: #0073E6;
+    transform: scale(1.1);
+}
+
+.social-btn.facebook {
+    background-image: url('../hinh-anh/icons/facebook.svg');
+    background-color: #1877F2;
+}
+
+.social-btn.facebook:hover {
+    background-color: #0A66FF;
+    transform: scale(1.1);
+}
+
+.social-btn.messenger {
+    background-image: url('../hinh-anh/icons/icons8-messenger-100.svg');
+    background-color: #0084FF;
+}
+
+.social-btn.messenger:hover {
+    background-color: #0073E6;
+    transform: scale(1.1);
+}

@@ -1,0 +1,67 @@
+/* Search Results Styling */
+.header-search {
+    position: relative;
+}
+
+#search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.search-result-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+    background-color: #f5f5f5;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.result-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.result-price {
+    font-size: 0.85rem;
+    color: #D4B89D;
+    font-weight: bold;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    #search-results {
+        max-height: 300px;
+    }
+    
+    .search-result-item {
+        padding: 10px 12px;
+    }
+    
+    .result-name {
+        font-size: 0.9rem;
+    }
+    
+    .result-price {
+        font-size: 0.8rem;
+    }
+}

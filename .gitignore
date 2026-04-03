@@ -1,0 +1,29 @@
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# PHP
+config.php.bak
+*.php.swp
+
+# Node/JS
+node_modules/
+npm-debug.log
+
+# Database
+*.sql
+*.db
+*.sqlite
+
+# Uploads (if any)
+uploads/
+temp/
+cache/
