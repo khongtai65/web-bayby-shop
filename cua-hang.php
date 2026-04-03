@@ -1,5 +1,32 @@
 <?php
 session_start();
+require_once 'config.php';
+
+// Get category from URL
+$category = isset($_GET['category']) ? $_GET['category'] : '';
+
+// Load products from database
+$products = [];
+if ($category) {
+    $sql = "SELECT id, name, price, discount_percent, image, stock, created_at FROM products WHERE category = ? ORDER BY id DESC";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("s", $category);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $products = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+    }
+} else {
+    $sql = "SELECT id, name, price, discount_percent, image, stock, created_at FROM products ORDER BY id DESC";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $products = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -11,6 +38,166 @@ session_start();
     <link rel="stylesheet" href="css-kieu-dang/mobile.css" media="(max-width: 768px)">
     <link rel="stylesheet" href="css/social-icons.css">
     <link rel="stylesheet" href="css/search.css">
+    <style>
+        /* Shopee Product Card Styles */
+        .product-card {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 190px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-discount-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #FF6B35;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            z-index: 2;
+        }
+
+        .product-info {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            color: #333;
+            line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            height: 2.6rem;
+        }
+
+        .product-rating-sold {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .product-stars {
+            color: #FFD700;
+        }
+
+        .product-sold {
+            color: #999;
+        }
+
+        .product-price-section {
+            margin-bottom: 0.6rem;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .product-price-current {
+            font-size: 1.2rem;
+            color: #FF6B35;
+            font-weight: bold;
+        }
+
+        .product-price-old {
+            font-size: 0.8rem;
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: auto;
+        }
+
+        .product-actions input {
+            width: 50px;
+            padding: 0.4rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+
+        .product-actions button {
+            flex: 1;
+            padding: 0.4rem;
+            border: none;
+            background: #FF6B35;
+            color: white;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .product-actions button:hover {
+            background: #E55A24;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Top Header -->
@@ -121,7 +308,54 @@ session_start();
         </div>
 
         <!-- Products Grid -->
-        <div id="products-container" class="product-grid"></div>
+        <div class="product-grid">
+            <?php
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    $discount_percent = floatval($product['discount_percent']) ?? 0;
+                    $final_price = $product['price'] * (1 - $discount_percent / 100);
+                    $rating = 4.5;
+                    $sold = rand(50, 1050);
+                    $stars = str_repeat('★', floor($rating)) . (($rating % 1 >= 0.5) ? '☆' : '');
+                    $image_src = !empty($product['image']) ? htmlspecialchars($product['image']) : 'hinh-anh/placeholder.png';
+                    ?>
+                    <div class="product-card" onclick="window.location.href='chi-tiet-san-pham-v2.php?id=<?php echo $product['id']; ?>'">
+                        <div class="product-image">
+                            <img src="<?php echo $image_src; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                            <?php if ($discount_percent > 0): ?>
+                                <div class="product-discount-badge">-<?php echo intval($discount_percent); ?>%</div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name"><?php echo htmlspecialchars($product['name']); ?></div>
+                            <div class="product-rating-sold">
+                                <div class="product-rating">
+                                    <span class="product-stars"><?php echo $stars; ?></span>
+                                    <span><?php echo $rating; ?></span>
+                                </div>
+                                <span class="product-sold">Đã bán <?php echo $sold; ?></span>
+                            </div>
+                            <div class="product-price-section">
+                                <div class="product-price">
+                                    <span class="product-price-current">₫<?php echo number_format($final_price, 0, ',', '.'); ?></span>
+                                    <?php if ($discount_percent > 0): ?>
+                                        <span class="product-price-old">₫<?php echo number_format($product['price'], 0, ',', '.'); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <input type="number" value="1" min="1" onclick="event.stopPropagation()">
+                                <button onclick="event.stopPropagation(); addToCart(<?php echo $product['id']; ?>)">🛒 Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">Không có sản phẩm nào</p>';
+            }
+            ?>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -236,8 +470,8 @@ session_start();
             updateWeightOptions();
         }
         
-        // Load products
-        loadProducts(category, gender, weight);
+        // Note: Products are already rendered by PHP, no need to loadProducts() here
+        updateCartCount();
     });
     </script>
 

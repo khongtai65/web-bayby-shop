@@ -4,61 +4,70 @@ require_once '../config.php';
 // GET: Lấy tất cả sản phẩm hoặc lọc theo danh mục
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     try {
-        $category = isset($_GET['category']) ? sanitizeInput($_GET['category']) : null;
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        // Get parameters
+        $category = isset($_GET['category']) ? $_GET['category'] : null;
+        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
         
-        // Validate ID if provided
-        if ($id && !validateInt($id)) {
-            jsonResponse('error', 'Invalid product ID', null, 400);
-        }
-        
-        // Lấy 1 sản phẩm
-        if ($id) {
+        // Case 1: Get single product by ID
+        if ($id && $id > 0) {
             $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE id = ?";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
-                throw new Exception('Prepare failed');
+                throw new Exception('Database prepare error: ' . $conn->error);
             }
             $stmt->bind_param("i", $id);
             if (!$stmt->execute()) {
-                throw new Exception('Execute failed');
+                throw new Exception('Query execute error: ' . $stmt->error);
             }
             $result = $stmt->get_result();
             $product = $result->fetch_assoc();
             
-            if ($product) {
-                jsonResponse('success', 'Product found', $product, 200);
-            } else {
+            if (!$product) {
                 jsonResponse('error', 'Product not found', null, 404);
             }
+            
+            // If we get here, return the product
+            $product['price'] = floatval($product['price']);
+            $product['discount_percent'] = floatval($product['discount_percent']);
+            jsonResponse('success', 'Product found', $product, 200);
+            exit;
         }
         
-        // Lấy tất cả sản phẩm hoặc lọc theo danh mục
+        // Case 2: Get products by category OR all products
         if ($category) {
             $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products WHERE category = ? ORDER BY id DESC LIMIT 1000";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
-                throw new Exception('Prepare failed');
+                throw new Exception('Database prepare error: ' . $conn->error);
             }
             $stmt->bind_param("s", $category);
         } else {
             $sql = "SELECT id, name, price, discount_percent, description, category, stock, image, gender, created_at FROM products ORDER BY id DESC LIMIT 1000";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
-                throw new Exception('Prepare failed');
+                throw new Exception('Database prepare error: ' . $conn->error);
             }
         }
         
         if (!$stmt->execute()) {
-            throw new Exception('Execute failed');
+            throw new Exception('Query execute error: ' . $stmt->error);
         }
         $result = $stmt->get_result();
         $products = $result->fetch_all(MYSQLI_ASSOC);
         
+        // Convert price to float
+        foreach ($products as &$p) {
+            $p['price'] = floatval($p['price']);
+            $p['discount_percent'] = floatval($p['discount_percent']);
+        }
+        unset($p);
+        
         jsonResponse('success', 'Products retrieved', $products, 200);
+        exit;
     } catch (Exception $e) {
         error_log("Product GET error: " . $e->getMessage());
-        jsonResponse('error', 'Failed to retrieve products', null, 500);
+        jsonResponse('error', 'Failed to retrieve products: ' . $e->getMessage(), null, 500);
+        exit;
     }
 }
 

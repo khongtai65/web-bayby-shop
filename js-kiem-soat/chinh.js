@@ -104,49 +104,56 @@ function createProductCard(product) {
     const final_price = product.price - discount_amount;
     
     // Hiển thị hình ảnh
-    const image_html = product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">` : '📦';
+    const image_html = product.image ? `<img src="${product.image}" alt="${product.name}">` : '📦';
     
-    // Hiển thị badge giảm giá
-    const discount_badge = discount_percent > 0 ? `<div style="position: absolute; top: 10px; right: 10px; background: #E74C3C; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">-${number_format_human(discount_percent)}%</div>` : '';
+    // Hiển thị badge giảm giá (Shopee style)
+    const discount_badge = discount_percent > 0 ? `<div class="product-discount-badge">-${number_format_human(discount_percent)}%</div>` : '';
+    
+    // Giả dữ liệu rating - có thể thay bằng field từ DB sau
+    const rating = 4.5;
+    const sold = Math.floor(Math.random() * 1000) + 50;
+    
+    // Tạo stars HTML
+    const stars = '★'.repeat(Math.floor(rating)) + (rating % 1 >= 0.5 ? '☆' : '');
     
     return `
-        <div class="product-card" onclick="viewProductDetail(${product.id})" style="cursor: pointer;">
-            <div class="product-image" style="position: relative;">
+        <div class="product-card" onclick="viewProductDetail(${product.id})">
+            <div class="product-image">
                 ${image_html}
                 ${discount_badge}
             </div>
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
-                <div class="product-description" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${product.description || 'Không có mô tả'}</div>
-                <div class="product-price" style="display: flex; gap: 10px; align-items: center;">
-                    ${discount_percent > 0 ? `<span style="text-decoration: line-through; color: #999;">₫${number_format_human(product.price)}</span>` : ''}
-                    <span style="${discount_percent > 0 ? 'color: #E74C3C; font-weight: bold; font-size: 1.1rem;' : ''}">${formatPrice(final_price)}</span>
+                <div class="product-rating-sold">
+                    <div class="product-rating">
+                        <span class="product-stars">${stars}</span>
+                        <span>${rating}</span>
+                    </div>
+                    <span class="product-sold">Đã bán ${sold}</span>
+                </div>
+                <div class="product-price-section">
+                    <div class="product-price">
+                        <span class="product-price-current">${formatPrice(final_price)}</span>
+                        ${discount_percent > 0 ? `<span class="product-price-old">${formatPrice(product.price)}</span>` : ''}
+                    </div>
                 </div>
                 <div class="product-actions">
-                    <input type="number" id="qty-${product.id}" value="1" min="1" class="quantity-input">
-                    <button onclick="event.stopPropagation(); addToCart(${product.id})" class="btn btn-primary">🛒 Thêm</button>
+                    <input type="number" id="qty-${product.id}" value="1" min="1">
+                    <button onclick="event.stopPropagation(); addToCart(${product.id})">🛒 Thêm</button>
                 </div>
             </div>
         </div>
     `;
 }
 
-// View product detail
-async function viewProductDetail(productId) {
-    try {
-        const response = await fetch(`./api-dieu-khien/san-pham.php?id=${productId}`);
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            const product = data.data;
-            showProductDetailModal(product);
-        } else {
-            alert('❌ Không tìm thấy sản phẩm');
-        }
-    } catch (error) {
-        console.error('Error loading product detail:', error);
-        alert('❌ Lỗi khi tải thông tin sản phẩm');
+// View product detail - Navigate to detail page (Shopee style)
+function viewProductDetail(productId) {
+    if (!productId) {
+        alert('❌ Product ID not found');
+        return;
     }
+    console.log('🔗 Navigating to product:', productId);
+    window.location.href = `chi-tiet-san-pham-v2.php?id=${productId}`;
 }
 
 // Show product detail modal
@@ -314,21 +321,40 @@ async function loadProducts(category = '', gender = '', weight = '') {
             url += `?category=${encodeURIComponent(category)}`;
         }
         
+        console.log('🔄 Loading products from:', url);
         const response = await fetch(url);
         const data = await response.json();
         
-        if (data.status === 'success') {
+        console.log('📦 API Response:', data);
+        
+        if (data.status === 'success' && data.data && Array.isArray(data.data)) {
             let products = data.data;
+            console.log(`✅ Found ${products.length} products`);
             
             // Filter by gender and weight if provided (implement as needed)
             // For now, just use category filter from API
             
-            const html = products.map(p => createProductCard(p)).join('');
-            document.getElementById('products-container').innerHTML = html || '<p>Không có sản phẩm nào</p>';
+            const html = products.map(p => {
+                console.log('📝 Creating card for:', p.name);
+                return createProductCard(p);
+            }).join('');
+            
+            const container = document.getElementById('products-container');
+            if (container) {
+                container.innerHTML = html || '<p>Không có sản phẩm nào</p>';
+            } else {
+                console.error('❌ products-container element not found!');
+            }
+        } else {
+            console.error('❌ Invalid response format:', data);
+            document.getElementById('products-container').innerHTML = '<p>Không có sản phẩm</p>';
         }
     } catch (error) {
-        console.error('Error loading products:', error);
-        document.getElementById('products-container').innerHTML = '<p>Lỗi khi tải sản phẩm</p>';
+        console.error('❌ Error loading products:', error);
+        const container = document.getElementById('products-container');
+        if (container) {
+            container.innerHTML = '<p>Lỗi khi tải sản phẩm</p>';
+        }
     }
     
     updateCartCount();

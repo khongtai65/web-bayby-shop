@@ -1,0 +1,9 @@
+{
+  "name": "baby-shop/e-commerce",
+  "description": "Baby Shop E-commerce Platform",
+  "type": "project",
+  "require": {
+    "php": "^7.4 || ^8.0"
+  },
+  "require-dev": {}
+}
