@@ -363,44 +363,48 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
 });
 
-// ===== DRAWER MENU FUNCTIONS =====
+// ===== POPUP MENU FUNCTIONS =====
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menuToggle');
-    const drawerMenu = document.getElementById('drawerMenu');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-    const drawerLinks = document.querySelectorAll('.drawer-link');
+    const popupMenu = document.getElementById('popupMenu');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupClose = document.getElementById('popupClose');
+    const popupLinks = document.querySelectorAll('.popup-link');
     
-    if (!menuToggle) return;
+    if (!menuToggle || !popupMenu) return;
     
-    // Toggle drawer menu
-    menuToggle.addEventListener('click', function() {
-        menuToggle.classList.toggle('active');
-        drawerMenu.classList.toggle('active');
-        drawerOverlay.classList.toggle('active');
+    // Toggle popup menu
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        popupMenu.classList.toggle('active');
+        popupOverlay.classList.toggle('active');
     });
     
-    // Close drawer when clicking backdrop
-    drawerOverlay.addEventListener('click', function() {
-        menuToggle.classList.remove('active');
-        drawerMenu.classList.remove('active');
-        drawerOverlay.classList.remove('active');
+    // Close popup when clicking close button
+    popupClose.addEventListener('click', function() {
+        popupMenu.classList.remove('active');
+        popupOverlay.classList.remove('active');
     });
     
-    // Close drawer when clicking a link
-    drawerLinks.forEach(link => {
+    // Close popup when clicking overlay
+    popupOverlay.addEventListener('click', function() {
+        popupMenu.classList.remove('active');
+        popupOverlay.classList.remove('active');
+    });
+    
+    // Close popup when clicking a link
+    popupLinks.forEach(link => {
         link.addEventListener('click', function() {
-            menuToggle.classList.remove('active');
-            drawerMenu.classList.remove('active');
-            drawerOverlay.classList.remove('active');
+            popupMenu.classList.remove('active');
+            popupOverlay.classList.remove('active');
         });
     });
     
-    // Close drawer on window resize (when viewport becomes large)
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            menuToggle.classList.remove('active');
-            drawerMenu.classList.remove('active');
-            drawerOverlay.classList.remove('active');
+    // Close popup when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!popupMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            popupMenu.classList.remove('active');
+            popupOverlay.classList.remove('active');
         }
     });
 });

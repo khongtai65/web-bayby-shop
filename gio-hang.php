@@ -47,19 +47,55 @@ session_start();
                     <span>🛒</span>
                     <span class="icon-badge" id="cart-count">0</span>
                 </a>
+                <button class="menu-toggle" id="menuToggle" title="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Navigation Menu -->
+    <!-- Popup Menu -->
+    <div class="popup-menu" id="popupMenu">
+        <div class="popup-header">
+            <h3>Menu</h3>
+            <button class="popup-close" id="popupClose">&times;</button>
+        </div>
+        
+        <div class="popup-section">
+            <h4>DANH MỤC</h4>
+            <a href="trang-chu.php" class="popup-link">🏠 Trang chủ</a>
+            <a href="cua-hang.php?category=0-3" class="popup-link">0-3 Tháng</a>
+            <a href="cua-hang.php?category=3-6" class="popup-link">3-6 Tháng</a>
+            <a href="cua-hang.php?category=6-12" class="popup-link">6-12 Tháng</a>
+            <a href="cua-hang.php?category=phu-kien" class="popup-link">Phụ kiện</a>
+        </div>
+
+        <div class="popup-section">
+            <h4>LIÊN HỆ</h4>
+            <div class="popup-social">
+                <a href="https://zalo.me/0866021711" class="social-btn zalo" title="Zalo" target="_blank">📱</a>
+                <a href="https://www.facebook.com/profile.php?id=61580260876532" class="social-btn facebook" title="Facebook" target="_blank">f</a>
+                <a href="https://www.facebook.com/profile.php?id=61580260876532" class="social-btn messenger" title="Messenger" target="_blank">💬</a>
+            </div>
+        </div>
+
+        <div class="popup-section">
+            <h4>🔔 HỖ TRỢ 24/7</h4>
+            <div class="popup-support">
+                <strong>Liên hệ:</strong> 📞 0866.021.711<br>
+                <small>Thứ 2 - Thứ 7</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+
     <!-- Navigation Menu -->
     <nav class="navbar">
         <div class="nav-container">
-            <button class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
             <div class="category-menu" id="categoryMenu">
                 <a href="trang-chu.php" class="category-link">🏠 TRANG CHỦ</a>
                 <a href="cua-hang.php?category=0-3" class="category-link">0-3 THÁNG</a>
@@ -69,39 +105,6 @@ session_start();
             </div>
         </div>
     </nav>
-
-    <!-- Drawer Menu Overlay -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-
-    <!-- Drawer Menu -->
-    <div class="drawer-menu" id="drawerMenu">
-        <div class="drawer-section">
-            <h3>DANH MỤC</h3>
-            <a href="trang-chu.php" class="drawer-link">🏠 Trang chủ</a>
-            <a href="cua-hang.php?category=0-3" class="drawer-link">0-3 Tháng</a>
-            <a href="cua-hang.php?category=3-6" class="drawer-link">3-6 Tháng</a>
-            <a href="cua-hang.php?category=6-12" class="drawer-link">6-12 Tháng</a>
-            <a href="cua-hang.php?category=phu-kien" class="drawer-link">Phụ kiện</a>
-        </div>
-        
-        <div class="drawer-section">
-            <h3>LIÊN HỆ</h3>
-            <div class="drawer-social">
-                <a href="https://zalo.me/0866021711" class="zalo" title="Zalo" target="_blank">📱</a>
-                <a href="https://www.facebook.com/profile.php?id=61580260876532" class="facebook" title="Facebook" target="_blank">f</a>
-                <a href="https://www.facebook.com/profile.php?id=61580260876532" class="messenger" title="Messenger" target="_blank">💬</a>
-            </div>
-        </div>
-
-        <div class="drawer-section">
-            <h3>🔔 HỖ TRỢ 24/7</h3>
-            <div class="drawer-support">
-                <strong>Liên hệ:</strong>
-                <span>📞 0866.021.711</span><br>
-                <span>Thứ 2 - Thứ 7 (Trừ lễ)</span>
-            </div>
-        </div>
-    </div>
 
     <div class="container">
         <h1>🛒 Giỏ Hàng</h1>

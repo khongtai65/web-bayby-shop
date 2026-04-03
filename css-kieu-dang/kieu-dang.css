@@ -1279,12 +1279,12 @@ h2 {
     }
 }
 
-/* ===== DRAWER MENU (HIDE ON DESKTOP) ===== */
-.drawer-overlay {
+/* ===== POPUP MENU (HIDE ON DESKTOP) ===== */
+.popup-overlay {
     display: none !important;
 }
 
-.drawer-menu {
+.popup-menu {
     display: none !important;
 }
 
