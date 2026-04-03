@@ -103,7 +103,7 @@ session_start();
             <h1>Shop Mẹ và Bé Đông Lan</h1>
             <p>Những sản phẩm sơ sinh chất lượng cao, an toàn cho mẹ và bé yêu</p>
             <p>Đặt hàng ngay hôm nay để nhận ưu đãi hấp dẫn!</p>
-            <button onclick="window.location.href='cua-hang.php'" class="btn btn-primary"><img src="hinh-anh/icons/cart.svg" alt="Giỏ hàng"> Mua Sắm Ngay</button>
+            <button onclick="goToShop()" class="btn btn-primary"><img src="hinh-anh/icons/cart.svg" alt="Giỏ hàng"> Mua Sắm Ngay</button>
         </div>
     </div>
 
@@ -210,6 +210,7 @@ session_start();
                         </div>
                     </div>
                     <input type="hidden" name="action" value="login">
+                    <input type="hidden" name="returnUrl" value="cua-hang.php">
                     <button type="submit" style="width: 100%; padding: 12px; background: #CD853F; color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;">
                         ✅ Đăng Nhập
                     </button>
@@ -243,6 +244,7 @@ session_start();
                         <input type="tel" name="phone" placeholder="0901234567" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 0.95rem;">
                     </div>
                     <input type="hidden" name="action" value="register">
+                    <input type="hidden" name="returnUrl" value="cua-hang.php">
                     <button type="submit" style="width: 100%; padding: 10px; background: #CD853F; color: white; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;">
                         ✅ Đăng Ký
                     </button>

@@ -37,6 +37,16 @@ async function checkLogin() {
     }
 }
 
+// Hành động "Mua Sắm Ngay" - kiểm tra đăng nhập
+async function goToShop() {
+    const isLoggedIn = await checkLogin();
+    if (!isLoggedIn) {
+        showLoginModal();
+    } else {
+        window.location.href = 'cua-hang.php';
+    }
+}
+
 // Hiện modal đăng nhập/đăng ký
 function showLoginModal() {
     const modal = document.getElementById('login-modal');

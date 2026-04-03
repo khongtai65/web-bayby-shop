@@ -101,7 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
                     '/', '', false, true); // httponly=true
             }
             
-            header('Location: ../tai-khoan.php');
+            // Redirect to returnUrl if provided, otherwise to account page
+            $redirect_url = isset($_POST['returnUrl']) ? '../' . $_POST['returnUrl'] : '../tai-khoan.php';
+            header('Location: ' . $redirect_url);
             exit;
         } else {
             $_SESSION['login_error'] = '❌ Tên đăng nhập hoặc mật khẩu không đúng';
@@ -167,7 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     
     if ($stmt->execute()) {
         $_SESSION['register_success'] = 'Tài khoản "' . $username . '" đã được tạo thành công! Bạn có thể đăng nhập luôn.';
-        header('Location: ../tai-khoan.php');
+        // Redirect to returnUrl if provided, otherwise to account page
+        $redirect_url = isset($_POST['returnUrl']) ? '../' . $_POST['returnUrl'] : '../tai-khoan.php';
+        header('Location: ' . $redirect_url);
         exit;
     } else {
         $_SESSION['register_error'] = 'Đăng ký thất bại: ' . $conn->error;
