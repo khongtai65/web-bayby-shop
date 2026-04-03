@@ -89,4 +89,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     
     jsonResponse('success', 'Orders retrieved', $orders);
 }
-?>

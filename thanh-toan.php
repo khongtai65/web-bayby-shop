@@ -49,15 +49,10 @@ if (!isset($_SESSION['user_id'])) {
                     <span>👤</span>
                 </a>
                 <a href="gio-hang.php" class="header-icon-btn cart-btn" title="Giỏ hàng">
-                    <span>🛒</span>
+                    <img src="hinh-anh/icons/order.png" alt="Giỏ hàng" class="header-icon-img">
                     <span class="icon-badge" id="cart-count">0</span>
                 </a>
-                <button class="menu-toggle" id="menuToggle" title="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+                <button class="menu-toggle" id="menuToggle" title="Menu">☰</button>
         </div>
     </div>
 

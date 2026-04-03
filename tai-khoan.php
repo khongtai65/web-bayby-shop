@@ -117,15 +117,10 @@ session_start();
                     <span>👤</span>
                 </a>
                 <a href="gio-hang.php" class="header-icon-btn cart-btn" title="Giỏ hàng">
-                    <span>🛒</span>
+                    <img src="hinh-anh/icons/order.png" alt="Giỏ hàng" class="header-icon-img">
                     <span class="icon-badge" id="cart-count">0</span>
                 </a>
-                <button class="menu-toggle" id="menuToggle" title="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+                <button class="menu-toggle" id="menuToggle" title="Menu">☰</button>
         </div>
     </div>
 
@@ -148,7 +143,7 @@ session_start();
         <div class="popup-section">
             <h4>LIÊN HỆ</h4>
             <div class="popup-social">
-                <a href="https://zalo.me/0866021711" class="social-btn zalo" title="Zalo" target="_blank">📱</a>
+                <a href="https://zalo.me/0866021711" class="social-btn zalo" title="Zalo" target="_blank"></a>
                 <a href="https://www.facebook.com/profile.php?id=61580260876532" class="social-btn facebook" title="Facebook" target="_blank">f</a>
                 <a href="https://www.facebook.com/profile.php?id=61580260876532" class="social-btn messenger" title="Messenger" target="_blank">💬</a>
             </div>

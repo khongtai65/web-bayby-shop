@@ -143,4 +143,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         jsonResponse('error', 'Failed to delete product');
     }
 }
-?>

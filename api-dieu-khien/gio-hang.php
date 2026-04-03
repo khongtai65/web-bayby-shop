@@ -174,4 +174,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         jsonResponse('error', 'Failed to update quantity');
     }
 }
-?>

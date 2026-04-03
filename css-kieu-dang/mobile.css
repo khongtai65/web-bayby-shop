@@ -178,6 +178,12 @@ body.popup-active {
     transform: scale(0.95);
 }
 
+.header-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
 .icon-badge {
     display: flex;
     align-items: center;
