@@ -116,7 +116,39 @@ body {
 }
 
 .social-links {
-    display: none;
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.social-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.social-btn.zalo {
+    background-color: #0084FF;
+}
+
+.social-btn.facebook {
+    background-color: #1877F2;
+}
+
+.social-btn.messenger {
+    background-color: #00B2FF;
+}
+
+.social-btn:active {
+    transform: scale(0.95);
 }
 
 .header-icon-btn {
