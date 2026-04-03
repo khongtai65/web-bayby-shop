@@ -98,13 +98,30 @@ async function updateCartCount() {
 
 // Create product card HTML
 function createProductCard(product) {
+    // Tính giá sau giảm
+    const discount_percent = product.discount_percent || 0;
+    const discount_amount = product.price * (discount_percent / 100);
+    const final_price = product.price - discount_amount;
+    
+    // Hiển thị hình ảnh
+    const image_html = product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">` : '📦';
+    
+    // Hiển thị badge giảm giá
+    const discount_badge = discount_percent > 0 ? `<div style="position: absolute; top: 10px; right: 10px; background: #E74C3C; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">-${number_format_human(discount_percent)}%</div>` : '';
+    
     return `
         <div class="product-card">
-            <div class="product-image">${product.image_path ? `<img src="${product.image_path}" alt="${product.name}">` : '📦'}</div>
+            <div class="product-image" style="position: relative;">
+                ${image_html}
+                ${discount_badge}
+            </div>
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
                 <div class="product-description">${product.description}</div>
-                <div class="product-price">${formatPrice(product.price)}</div>
+                <div class="product-price" style="display: flex; gap: 10px; align-items: center;">
+                    ${discount_percent > 0 ? `<span style="text-decoration: line-through; color: #999;">₫${number_format_human(product.price)}</span>` : ''}
+                    <span style="${discount_percent > 0 ? 'color: #E74C3C; font-weight: bold; font-size: 1.1rem;' : ''}">${formatPrice(final_price)}</span>
+                </div>
                 <div class="product-actions">
                     <input type="number" id="qty-${product.id}" value="1" min="1" class="quantity-input">
                     <button onclick="addToCart(${product.id})" class="btn btn-primary">🛒 Thêm</button>
@@ -112,6 +129,11 @@ function createProductCard(product) {
             </div>
         </div>
     `;
+}
+
+// Helper function for number formatting
+function number_format_human(num) {
+    return parseFloat(num).toLocaleString('vi-VN');
 }
 
 // Load featured products (homepage)

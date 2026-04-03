@@ -283,7 +283,7 @@ if ($result) {
         <!-- Form thêm/sửa sản phẩm -->
         <div class="product-form">
             <h2>➕ Thêm Sản Phẩm Mới</h2>
-            <form id="productForm" method="POST">
+            <form id="productForm" method="POST" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Tên Sản Phẩm *</label>
@@ -303,13 +303,35 @@ if ($result) {
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="price">Giá (VND) *</label>
-                        <input type="number" id="price" name="price" required min="1000" placeholder="50000">
+                        <label for="price">Giá Gốc (VND) *</label>
+                        <input type="number" id="price" name="price" required min="1000" placeholder="50000" onchange="calculateDiscountedPrice()">
                     </div>
+                    <div class="form-group">
+                        <label for="discount_percent">Giảm Giá (%)</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="number" id="discount_percent" name="discount_percent" min="0" max="100" value="0" placeholder="0" step="0.5" onchange="calculateDiscountedPrice()" style="flex: 1;">
+                            <div style="padding: 10px; background: #f0f0f0; border-radius: 5px; font-weight: bold; min-width: 100px;">
+                                Giá: <span id="discounted-price" style="color: #E74C3C;">0 ₫</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label for="stock">Số Lượng *</label>
                         <input type="number" id="stock" name="stock" required min="0" placeholder="100">
                     </div>
+                    <div class="form-group">
+                        <label for="image">Ảnh Sản Phẩm (JPG/PNG) *</label>
+                        <input type="file" id="image" name="image" required accept=".jpg,.jpeg,.png" onchange="previewImage(this)">
+                        <small style="color: #666; display: block; margin-top: 5px;">Chỉ hỗ trợ JPG và PNG</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Xem trước ảnh:</label>
+                    <img id="image-preview" src="" alt="Xem trước" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 5px; display: none;">
                 </div>
 
                 <div class="form-group">
@@ -317,14 +339,9 @@ if ($result) {
                     <textarea id="description" name="description" placeholder="Mô tả chi tiết về sản phẩm..."></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="image_path">Đường dẫn ảnh (URL)</label>
-                    <input type="url" id="image_path" name="image_path" placeholder="https://example.com/image.png">
-                </div>
-
                 <div class="btn-group">
                     <button type="submit" class="btn btn-primary">💾 Thêm Sản Phẩm</button>
-                    <button type="reset" class="btn btn-secondary">↻ Làm mới</button>
+                    <button type="reset" class="btn btn-secondary" onclick="resetForm()">↻ Làm mới</button>
                 </div>
             </form>
         </div>
@@ -339,23 +356,34 @@ if ($result) {
                         <th>ID</th>
                         <th>Tên Sản Phẩm</th>
                         <th>Danh Mục</th>
-                        <th>Giá</th>
+                        <th>Giá Gốc</th>
+                        <th>Giảm Giá</th>
+                        <th>Giá Bán</th>
                         <th>Số Lượng</th>
+                        <th>Ngày Tạo</th>
                         <th>Hành Động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($products as $product): ?>
+                    <?php foreach ($products as $product): 
+                        // Tính giá sau giảm
+                        $discount_percent = isset($product['discount_percent']) ? $product['discount_percent'] : 0;
+                        $discount_amount = $product['price'] * ($discount_percent / 100);
+                        $final_price = $product['price'] - $discount_amount;
+                    ?>
                         <tr>
                             <td><?php echo $product['id']; ?></td>
                             <td><?php echo htmlspecialchars($product['name']); ?></td>
                             <td><?php echo htmlspecialchars($product['category']); ?></td>
                             <td>₫<?php echo number_format($product['price'], 0, ',', '.'); ?></td>
+                            <td><?php echo $discount_percent > 0 ? '<span style="color: #E74C3C; font-weight: bold;">' . number_format($discount_percent, 2) . '%</span>' : '-'; ?></td>
+                            <td style="<?php echo $discount_percent > 0 ? 'color: #27ae60; font-weight: bold;' : ''; ?>">₫<?php echo number_format($final_price, 0, ',', '.'); ?></td>
                             <td>
                                 <span style="background: <?php echo $product['stock'] > 20 ? '#d4edda' : '#f8d7da'; ?>; padding: 4px 8px; border-radius: 3px;">
                                     <?php echo $product['stock']; ?>
                                 </span>
                             </td>
+                            <td><?php echo isset($product['created_at']) ? date('d/m/Y H:i', strtotime($product['created_at'])) : 'N/A'; ?></td>
                             <td>
                                 <div class="action-btns">
                                     <button class="btn-edit" onclick="editProduct(<?php echo $product['id']; ?>)">✏️ Sửa</button>
@@ -370,38 +398,72 @@ if ($result) {
     </div>
 
     <script>
+        // Tính giá sau giảm
+        function calculateDiscountedPrice() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const discountPercent = parseFloat(document.getElementById('discount_percent').value) || 0;
+            const discountedPrice = price - (price * discountPercent / 100);
+            document.getElementById('discounted-price').textContent = 
+                discountedPrice.toLocaleString('vi-VN') + ' ₫';
+        }
+
+        // Xem trước ảnh
+        function previewImage(input) {
+            const preview = document.getElementById('image-preview');
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('image-preview').style.display = 'none';
+            document.getElementById('discounted-price').textContent = '0 ₫';
+        }
+
         // Submit form thêm sản phẩm
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const formData = {
-                name: document.getElementById('name').value,
-                price: parseFloat(document.getElementById('price').value),
-                description: document.getElementById('description').value,
-                category: document.getElementById('category').value,
-                stock: parseInt(document.getElementById('stock').value),
-                image_path: document.getElementById('image_path').value
-            };
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('price', parseFloat(document.getElementById('price').value));
+            formData.append('discount_percent', parseFloat(document.getElementById('discount_percent').value) || 0);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('stock', parseInt(document.getElementById('stock').value));
+            
+            const imageFile = document.getElementById('image').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
 
             try {
                 const response = await fetch('./api-dieu-khien/san-pham.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
+                    body: formData
                 });
 
                 const data = await response.json();
 
                 if (data.status === 'success') {
                     alert('✅ Thêm sản phẩm thành công!');
-                    document.getElementById('productForm').reset();
+                    resetForm();
                     location.reload();
                 } else {
                     alert('❌ Lỗi: ' + data.message);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('❌ Lỗi khi thêm sản phẩm');
+                alert('❌ Lỗi khi thêm sản phẩm: ' + error.message);
             }
         });
 
@@ -416,10 +478,15 @@ if ($result) {
             const newName = prompt('Nhập tên mới:');
             if (newName === null) return;
 
+            const newDiscount = prompt('Nhập % giảm giá (0-100):');
+            if (newDiscount === null) return;
+
             const formData = {
                 id: id,
                 name: newName,
                 price: parseFloat(newPrice),
+                stock: parseInt(newStock),
+                discount_percent: parseFloat(newDiscount)
                 stock: parseInt(newStock)
             };
 
