@@ -166,16 +166,32 @@ session_start();
 
         <?php if (isset($_SESSION['user_id'])): ?>
             <!-- Logged In Profile -->
-            <div class="user-profile">
-                <h2>Xin chào, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h2>
-                <p><strong>Tên đăng nhập:</strong> <?php echo htmlspecialchars($_SESSION['username']); ?></p>
-                <p><strong>Tên đầy đủ:</strong> <?php echo htmlspecialchars($_SESSION['full_name'] ?? $_SESSION['user_name']); ?></p>
-                <p><strong>Số điện thoại:</strong> <?php echo htmlspecialchars($_SESSION['user_phone'] ?? 'Chưa cập nhật'); ?></p>
-                <a href="api-dieu-khien/xac-thuc.php?logout=1" class="btn btn-danger">🚪 Đăng Xuất</a>
+            <div class="user-profile" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 10px; margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div>
+                        <h2 style="margin: 0; color: white;">👋 Xin chào, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h2>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                            <p style="margin: 0.5rem 0 0; font-size: 0.9rem; opacity: 0.9;">⚙️ Tài khoản Admin</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                    <p style="margin: 0.5rem 0;"><strong>👤 Tên đăng nhập:</strong> <?php echo htmlspecialchars($_SESSION['username']); ?></p>
+                    <p style="margin: 0.5rem 0;"><strong>📝 Tên đầy đủ:</strong> <?php echo htmlspecialchars($_SESSION['full_name'] ?? $_SESSION['user_name']); ?></p>
+                    <p style="margin: 0.5rem 0;"><strong>📞 Số điện thoại:</strong> <?php echo htmlspecialchars($_SESSION['user_phone'] ?? 'Chưa cập nhật'); ?></p>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <a href="quan-ly-san-pham.php" style="background: #FF6347; color: white; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-weight: 600; transition: 0.3s; flex: 1; text-align: center; min-width: 150px;">⚙️ Dashboard Quản Lý</a>
+                    <?php endif; ?>
+                    <a href="api-dieu-khien/xac-thuc.php?logout=1" style="background: rgba(255,255,255,0.3); color: white; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-weight: 600; transition: 0.3s; flex: 1; text-align: center; min-width: 150px;">🚪 Đăng Xuất</a>
+                </div>
             </div>
 
             <div class="user-orders">
-                <h2>Lịch sử đơn hàng</h2>
+                <h2>📦 Lịch sử đơn hàng</h2>
                 <div id="orders-list"></div>
             </div>
 
@@ -189,15 +205,23 @@ session_start();
             <?php
             // Display error/success messages
             if (isset($_SESSION['login_error'])) {
-                echo '<p style="color: red; margin-bottom: 1rem; background: #ffe6e6; padding: 1rem; border-radius: 5px;">❌ ' . htmlspecialchars($_SESSION['login_error']) . '</p>';
+                echo '<div style="color: #721c24; margin-bottom: 1.5rem; background: #f8d7da; padding: 1.5rem; border: 1px solid #f5c6cb; border-radius: 5px; border-left: 4px solid #f5c6cb;">
+                    <strong>❌ Lỗi Đăng Nhập:</strong><br>' . htmlspecialchars($_SESSION['login_error']) . '
+                </div>';
                 unset($_SESSION['login_error']);
             }
             if (isset($_SESSION['register_error'])) {
-                echo '<p style="color: red; margin-bottom: 1rem; background: #ffe6e6; padding: 1rem; border-radius: 5px;">❌ ' . htmlspecialchars($_SESSION['register_error']) . '</p>';
+                echo '<div style="color: #721c24; margin-bottom: 1.5rem; background: #f8d7da; padding: 1.5rem; border: 1px solid #f5c6cb; border-radius: 5px; border-left: 4px solid #f5c6cb;">
+                    <strong>❌ Lỗi Đăng Ký:</strong><br>' . htmlspecialchars($_SESSION['register_error']) . '
+                </div>';
                 unset($_SESSION['register_error']);
             }
             if (isset($_SESSION['register_success'])) {
-                echo '<p style="color: green; margin-bottom: 1rem; background: #e6ffe6; padding: 1rem; border-radius: 5px;">✅ ' . htmlspecialchars($_SESSION['register_success']) . '</p>';
+                echo '<div style="color: #155724; margin-bottom: 1.5rem; background: #d4edda; padding: 1.5rem; border: 1px solid #c3e6cb; border-radius: 5px; border-left: 4px solid #28a745;">
+                    <h3 style="margin-top: 0; color: #155724;">✅ Đăng Ký Thành Công!</h3>
+                    <p style="margin: 0.5rem 0;">' . htmlspecialchars($_SESSION['register_success']) . '</p>
+                    <p style="margin: 1rem 0 0; font-size: 0.95rem;">👇 Vui lòng đăng nhập bằng tài khoản vừa tạo:</p>
+                </div>';
                 unset($_SESSION['register_success']);
             }
             ?>

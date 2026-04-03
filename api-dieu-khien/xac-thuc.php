@@ -169,11 +169,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $stmt->bind_param("sssss", $username, $name, $full_name, $password_hash, $phone);
     
     if ($stmt->execute()) {
-        $_SESSION['register_success'] = '✅ Đăng ký thành công! Vui lòng đăng nhập.';
+        $_SESSION['register_success'] = 'Tài khoản "' . $username . '" đã được tạo thành công! Bạn có thể đăng nhập luôn.';
         header('Location: ../tai-khoan.php');
         exit;
     } else {
-        $_SESSION['register_error'] = '❌ Đăng ký thất bại: ' . $conn->error;
+        $_SESSION['register_error'] = 'Đăng ký thất bại: ' . $conn->error;
         header('Location: ../tai-khoan.php');
         exit;
     }

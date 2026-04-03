@@ -1039,22 +1039,31 @@ h2 {
 }
 
 .user-profile {
-    background: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
     padding: 2rem;
     border-radius: 10px;
     margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
 .user-profile p {
-    margin-bottom: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #eee;
+    margin: 0.5rem 0;
+    padding: 0;
+    border-bottom: none;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.user-profile strong {
+    font-weight: 600;
 }
 
 .user-orders {
     background: white;
     padding: 2rem;
     border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .order-item {
