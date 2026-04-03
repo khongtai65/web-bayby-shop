@@ -274,7 +274,7 @@ session_start();
                             <input type="password" id="register-password" name="password" required placeholder="Tối đa 16 ký tự" minlength="6" maxlength="16" style="flex: 1; padding-right: 40px;">
                             <button type="button" id="toggle-register-password" class="toggle-password-btn" onclick="togglePasswordVisibility('register-password', 'toggle-register-password')" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 5px;">👁️</button>
                         </div>
-                        <small style="color: #666;">⚠️ 6-16 ký tự, chỉ chứa chữ, số, @, &</small>
+                        <small style=\"color: #666;\">⚠️ 6-16 ký tự, bất kỳ ký tự nào</small>
                     </div>
                     <div class="form-group">
                         <label>Số điện thoại</label>
@@ -387,13 +387,6 @@ session_start();
 
         if (password.length > 16) {
             alert('❌ Mật khẩu tối đa 16 ký tự');
-            return false;
-        }
-
-        // Check password contains only allowed special chars (@, &)
-        const passwordRegex = /^[a-zA-Z0-9@&]*$/;
-        if (!passwordRegex.test(password)) {
-            alert('❌ Mật khẩu chỉ được chứa chữ, số, @, &');
             return false;
         }
 

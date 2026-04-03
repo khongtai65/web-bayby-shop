@@ -6,11 +6,13 @@ $blocked_words = ['admin', 'root', 'fuck', 'ass', 'shit', 'damn', 'crap'];
 
 // ===== PASSWORD HASHING (Using bcrypt instead of MD5) =====
 function hashPassword($password) {
-    return password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+    // Dùng plain text - không hash
+    return $password;
 }
 
-function verifyPassword($password, $hash) {
-    return password_verify($password, $hash);
+function verifyPassword($password, $stored) {
+    // So sánh plain text
+    return $password === $stored;
 }
 
 // Hàm validate mật khẩu
@@ -21,11 +23,6 @@ function validatePassword($password) {
 
     if (strlen($password) > 16) {
         return "Mật khẩu tối đa 16 ký tự";
-    }
-    
-    // Chỉ cho phép chữ, số, @, &
-    if (!preg_match('/^[a-zA-Z0-9@&]*$/', $password)) {
-        return "Mật khẩu chỉ được chứa chữ, số, @, &";
     }
     
     return true;
