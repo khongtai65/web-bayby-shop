@@ -19,13 +19,13 @@ function validatePassword($password) {
         return "Mật khẩu tối thiểu 6 ký tự";
     }
 
-    if (strlen($password) > 100) {
-        return "Mật khẩu tối dài 100 ký tự";
+    if (strlen($password) > 16) {
+        return "Mật khẩu tối đa 16 ký tự";
     }
     
-    // Chỉ cho phép chữ, số, @, &, -, _, .
-    if (!preg_match('/^[a-zA-Z0-9@&._-]*$/', $password)) {
-        return "Mật khẩu chỉ được chứa chữ, số, @, &, -, _, .";
+    // Chỉ cho phép chữ, số, @, &
+    if (!preg_match('/^[a-zA-Z0-9@&]*$/', $password)) {
+        return "Mật khẩu chỉ được chứa chữ, số, @, &";
     }
     
     return true;
@@ -35,12 +35,12 @@ function validatePassword($password) {
 function validateUsername($username) {
     global $blocked_words;
     
-    if (strlen($username) < 6) {
-        return "Tên đăng nhập tối thiểu 6 ký tự";
+    if (strlen($username) < 4) {
+        return "Tên đăng nhập tối thiểu 4 ký tự";
     }
     
-    if (strlen($username) > 20) {
-        return "Tên đăng nhập tối đa 20 ký tự";
+    if (strlen($username) > 12) {
+        return "Tên đăng nhập tối đa 12 ký tự";
     }
     
     // Kiểm tra từ khiếm nhã

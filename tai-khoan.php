@@ -232,11 +232,14 @@ session_start();
                 <form method="POST" action="api-dieu-khien/xac-thuc.php" onsubmit="return validateLoginForm()">
                     <div class="form-group">
                         <label>Tên đăng nhập</label>
-                        <input type="text" id="login-username" name="username" required placeholder="6-12 ký tự" minlength="6" maxlength="12">
+                        <input type="text" id="login-username" name="username" required placeholder="4-12 ký tự" minlength="4" maxlength="12">
                     </div>
                     <div class="form-group">
                         <label>Mật khẩu</label>
-                        <input type="password" id="login-password" name="password" required placeholder="6-12 ký tự" minlength="6" maxlength="12">
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="password" id="login-password" name="password" required placeholder="Tối đa 16 ký tự" minlength="6" maxlength="16" style="flex: 1; padding-right: 40px;">
+                            <button type="button" id="toggle-login-password" class="toggle-password-btn" onclick="togglePasswordVisibility('login-password', 'toggle-login-password')" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 5px;">👁️</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>
@@ -254,8 +257,8 @@ session_start();
                 <form method="POST" action="api-dieu-khien/xac-thuc.php" onsubmit="return validateRegisterForm()">
                     <div class="form-group">
                         <label>Tên đăng nhập <span style="color: red;">*</span></label>
-                        <input type="text" id="register-username" name="username" required placeholder="6-12 ký tự, không 'admin'" minlength="6" maxlength="12">
-                        <small style="color: #666;">⚠️ 6-12 ký tự, không chứa 'admin', không có khoảng trắng</small>
+                        <input type="text" id="register-username" name="username" required placeholder="4-12 ký tự, không 'admin'" minlength="4" maxlength="12">
+                        <small style="color: #666;">⚠️ 4-12 ký tự, không chứa 'admin', không có khoảng trắng, không được trùng lặp</small>
                     </div>
                     <div class="form-group">
                         <label>Họ và tên <span style="color: red;">*</span></label>
@@ -267,8 +270,11 @@ session_start();
                     </div>
                     <div class="form-group">
                         <label>Mật khẩu <span style="color: red;">*</span></label>
-                        <input type="password" id="register-password" name="password" required placeholder="6-12 ký tự" minlength="6" maxlength="12">
-                        <small style="color: #666;">⚠️ 6-12 ký tự, chỉ chứa chữ, số, @, &</small>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="password" id="register-password" name="password" required placeholder="Tối đa 16 ký tự" minlength="6" maxlength="16" style="flex: 1; padding-right: 40px;">
+                            <button type="button" id="toggle-register-password" class="toggle-password-btn" onclick="togglePasswordVisibility('register-password', 'toggle-register-password')" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 5px;">👁️</button>
+                        </div>
+                        <small style="color: #666;">⚠️ 6-16 ký tự, chỉ chứa chữ, số, @, &</small>
                     </div>
                     <div class="form-group">
                         <label>Số điện thoại</label>
@@ -308,6 +314,20 @@ session_start();
         document.getElementById('btn-register').classList.add('active');
     }
 
+    // Hiển thị/ẩn mật khẩu
+    function togglePasswordVisibility(inputId, buttonId) {
+        const input = document.getElementById(inputId);
+        const button = document.getElementById(buttonId);
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            button.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            button.textContent = '👁️';
+        }
+    }
+
     // Validate form đăng nhập
     function validateLoginForm() {
         const username = document.getElementById('login-username').value.trim();
@@ -318,13 +338,13 @@ session_start();
             return false;
         }
 
-        if (username.length < 6 || username.length > 12) {
-            alert('❌ Tên đăng nhập phải từ 6-12 ký tự');
+        if (username.length < 4 || username.length > 12) {
+            alert('❌ Tên đăng nhập phải từ 4-12 ký tự');
             return false;
         }
         
-        if (password.length < 6 || password.length > 12) {
-            alert('❌ Mật khẩu phải từ 6-12 ký tự');
+        if (password.length < 6 || password.length > 16) {
+            alert('❌ Mật khẩu phải từ 6-16 ký tự');
             return false;
         }
         
@@ -339,8 +359,8 @@ session_start();
         const password = document.getElementById('register-password').value;
 
         // Validate username
-        if (!username || username.length < 6) {
-            alert('❌ Tên đăng nhập tối thiểu 6 ký tự');
+        if (!username || username.length < 4) {
+            alert('❌ Tên đăng nhập tối thiểu 4 ký tự');
             return false;
         }
 
@@ -365,8 +385,8 @@ session_start();
             return false;
         }
 
-        if (password.length > 12) {
-            alert('❌ Mật khẩu tối đa 12 ký tự');
+        if (password.length > 16) {
+            alert('❌ Mật khẩu tối đa 16 ký tự');
             return false;
         }
 
