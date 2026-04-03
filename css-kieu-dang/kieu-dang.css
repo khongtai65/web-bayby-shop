@@ -117,7 +117,7 @@ body {
     cursor: pointer;
     font-size: 1rem;
     padding: 0;
-    color: #FF1493;
+    color: #111111;
 }
 
 .header-right {
@@ -151,7 +151,7 @@ body {
 .header-icon-btn {
     width: 38px;
     height: 38px;
-    background-color: #DC143C;
+    background-color: #000000;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -176,7 +176,7 @@ body {
     height: 18px;
     background-color: white;
     border-radius: 50%;
-    color: #DC143C;
+    color: #000000;
     font-size: 0.65rem;
     font-weight: bold;
     position: absolute;
@@ -239,11 +239,11 @@ body {
 }
 
 .social-btn.youtube {
-    background-color: #FF0000;
+    background-color: #050505;
 }
 
 .social-btn.youtube:hover {
-    background-color: #E60000;
+    background-color: #0f0f0f;
 }
 
 .social-btn.twitter {

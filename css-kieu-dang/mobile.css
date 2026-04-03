@@ -161,7 +161,7 @@ body.popup-active {
 .header-icon-btn {
     width: 32px;
     height: 32px;
-    background-color: #DC143C;
+    background-color: #050505;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -186,7 +186,7 @@ body.popup-active {
     height: 15px;
     background-color: white;
     border-radius: 50%;
-    color: #DC143C;
+    color: #070707;
     font-size: 0.55rem;
     font-weight: bold;
     position: absolute;
@@ -202,21 +202,6 @@ body.popup-active {
 .nav-container {
     display: flex;
     position: relative;
-}
-
-.menu-toggle {
-    display: none !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 0.7rem;
-    padding: 0.5rem;
-    z-index: 102;
 }
 
 .category-menu {
@@ -759,7 +744,7 @@ h3 { font-size: 0.95rem; }
     top: 0 !important;
     width: 280px !important;
     height: 100vh !important;
-    background: linear-gradient(180deg, #DC143C 0%, #8B0000 100%) !important;
+    background: linear-gradient(180deg, #161515 0%, #000000 100%) !important;
     z-index: 100 !important;
     overflow-y: auto !important;
     box-shadow: 4px 0 12px rgba(0,0,0,0.6) !important;
@@ -777,7 +762,7 @@ h3 { font-size: 0.95rem; }
     align-items: center;
     padding: 1.2rem;
     border-bottom: 2px solid rgba(255,255,255,0.2);
-    background: linear-gradient(90deg, #8B0000 0%, #DC143C 100%);
+    background: linear-gradient(90deg, #1a0707 0%, #22050b 100%);
     position: sticky;
     top: 0;
     z-index: 1000;
