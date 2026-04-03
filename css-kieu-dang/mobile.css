@@ -652,123 +652,18 @@ h3 { font-size: 0.95rem; }
     border-radius: 2px;
 }
 
-/* ===== STICKY CONTACT BAR ===== */
-.sticky-contact {
-    position: fixed;
-    right: 0;
-    top: 65px;
-    width: 50px;
-    height: auto;
-    max-height: calc(100vh - 65px);
-    background: linear-gradient(180deg, #E74C3C 0%, #FF69B4 100%);
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.6rem;
-    padding: 0.8rem 0.4rem;
-    z-index: 98;
-    box-shadow: -3px 0 10px rgba(0,0,0,0.3);
-    border-radius: 8px 0 0 8px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+/* ===== STICKY CONTACT BAR (JavaScript creates it) ===== */
 
-.sticky-btn {
-    width: 42px;
-    height: 42px;
-    min-width: 42px !important;
-    min-height: 42px !important;
-    background-color: white;
-    border-radius: 6px;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    flex-shrink: 0;
-    cursor: pointer;
-    border: none;
-    padding: 0;
-    line-height: 1;
-}
-
-.sticky-btn:active {
-    transform: scale(0.95);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.sticky-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.sticky-hotline {
-    background: linear-gradient(135deg, #DC143C, #FF69B4) !important;
-    color: white !important;
-    font-size: 0.65rem;
-    line-height: 1;
-    padding: 0.3rem !important;
-}
-
-.sticky-hotline small {
-    display: block;
-    font-size: 0.5rem;
-    margin-top: 0.1rem;
-}
-
-.sticky-zalo {
-    background-color: #0084FF !important;
-    color: white !important;
-}
-
-.sticky-facebook {
-    background-color: #1877F2 !important;
-    color: white !important;
-}
-
-.sticky-messenger {
-    background-color: #0084FF !important;
-    color: white !important;
-}
-
-.sticky-cart {
-    background-color: #E74C3C !important;
-    color: white !important;
-    position: relative;
-}
-
-.sticky-cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background-color: #FFD700;
-    color: #333;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: bold;
-    border: 2px solid white;
-}
-
-/* Hide scrollbar for sticky contact */
-.sticky-contact::-webkit-scrollbar {
+/* Hide scrollbar styling for sticky contact */
+#sticky-contact::-webkit-scrollbar {
     width: 3px;
 }
 
-.sticky-contact::-webkit-scrollbar-track {
+#sticky-contact::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.sticky-contact::-webkit-scrollbar-thumb {
+#sticky-contact::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.4);
     border-radius: 2px;
 }
