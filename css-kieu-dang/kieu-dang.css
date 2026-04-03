@@ -358,45 +358,45 @@ body {
 
 /* Mobile Menu Styles */
 @media (max-width: 768px) {
+    /* Show/Hide toggle button */
     .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: none !important;
     }
     
-    /* Show categories as horizontal scroll on tablet/mobile */
+    /* Categories always visible as horizontal scroll */
     .category-menu {
-        flex-direction: row;
-        max-height: auto;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        opacity: 1;
-        transition: all 0.3s ease;
+        flex-direction: row !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        opacity: 1 !important;
+        visibility: visible !important;
         border-top: 1px solid rgba(255,255,255,0.2);
-        padding: 0.5rem 0;
+        padding: 0.5rem 0 !important;
         white-space: nowrap;
         background: linear-gradient(90deg, #4734353b 0%, #301d23 100%);
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
     }
     
     .category-menu.active {
-        max-height: auto;
-        opacity: 1;
+        max-height: none !important;
+        opacity: 1 !important;
     }
     
     .category-menu.collapsed {
-        display: flex;
+        display: flex !important;
     }
     
     .category-link {
         flex: 0 0 auto;
         width: auto;
-        min-width: 140px;
+        min-width: 130px;
         border-right: 1px solid rgba(255,255,255,0.2);
-        border-bottom: none;
+        border-bottom: none !important;
         text-align: center;
-        padding: 1rem 1.2rem;
+        padding: 0.9rem 1.1rem;
         white-space: normal;
         scroll-snap-align: start;
         font-size: 0.85rem;
@@ -407,31 +407,31 @@ body {
     }
     
     .category-link .arrow {
-        display: none;
+        display: none !important;
     }
 }
 
-/* Extra small phones - Stack categories vertically but keep visible */
+/* Extra small phones - Even more compact */
 @media (max-width: 480px) {
     .menu-toggle {
-        display: none;
+        display: none !important;
     }
     
     .category-menu {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0.4rem 0;
-        max-height: auto;
-        opacity: 1;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        padding: 0.35rem 0 !important;
+        max-height: none !important;
+        opacity: 1 !important;
         border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .category-link {
         flex: 0 0 auto;
         width: auto;
-        min-width: 120px;
-        padding: 0.8rem 1rem;
-        font-size: 0.8rem;
+        min-width: 100px;
+        padding: 0.7rem 0.8rem;
+        font-size: 0.75rem;
         border-right: 1px solid rgba(255,255,255,0.2);
         border-bottom: none;
         text-align: center;
