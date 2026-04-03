@@ -7,25 +7,47 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
 
 // Load products from database
 $products = [];
-if ($category) {
-    $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock, created_at FROM products WHERE category = ? ORDER BY id DESC";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("s", $category);
-        $stmt->execute();
+$load_error = '';
+
+try {
+    if ($category) {
+        $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock, created_at FROM products WHERE category = ? ORDER BY id DESC";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception('Prepare failed: ' . $conn->error);
+        }
+        if (!$stmt->bind_param("s", $category)) {
+            throw new Exception('Bind failed: ' . $stmt->error);
+        }
+        if (!$stmt->execute()) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
         $result = $stmt->get_result();
+        if (!$result) {
+            throw new Exception('Get result failed: ' . $stmt->error);
+        }
+        $products = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+    } else {
+        $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock, created_at FROM products ORDER BY id DESC";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception('Prepare failed: ' . $conn->error);
+        }
+        if (!$stmt->execute()) {
+            throw new Exception('Execute failed: ' . $stmt->error);
+        }
+        $result = $stmt->get_result();
+        if (!$result) {
+            throw new Exception('Get result failed: ' . $stmt->error);
+        }
         $products = $result->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
     }
-} else {
-    $sql = "SELECT id, name, price, COALESCE(discount_percent, 0) as discount_percent, image, stock, created_at FROM products ORDER BY id DESC";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $products = $result->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
-    }
+} catch (Exception $e) {
+    error_log("CUA-HANG ERROR: " . $e->getMessage());
+    $load_error = "Lỗi khi tải sản phẩm: " . $e->getMessage();
+    $products = [];
 }
 ?>
 <!DOCTYPE html>
@@ -306,6 +328,13 @@ if ($category) {
                 </div>
             </div>
         </div>
+
+        <!-- Error Message Display -->
+        <?php if (!empty($load_error)): ?>
+            <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                <strong>⚠️ Lỗi:</strong> <?php echo htmlspecialchars($load_error); ?>
+            </div>
+        <?php endif; ?>
 
         <!-- Products Grid -->
         <div class="product-grid">
