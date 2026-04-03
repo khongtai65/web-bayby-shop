@@ -304,12 +304,12 @@ if ($result) {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="price">Giá Gốc (VND) *</label>
-                        <input type="number" id="price" name="price" required min="1000" placeholder="50000" onchange="calculateDiscountedPrice()">
+                        <input type="number" id="price" name="price" required min="1000" placeholder="50000" oninput="calculateDiscountedPrice()" onchange="calculateDiscountedPrice()">
                     </div>
                     <div class="form-group">
                         <label for="discount_percent">Giảm Giá (%)</label>
                         <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="number" id="discount_percent" name="discount_percent" min="0" max="100" value="0" placeholder="0" step="0.5" onchange="calculateDiscountedPrice()" style="flex: 1;">
+                            <input type="number" id="discount_percent" name="discount_percent" min="0" max="100" value="0" placeholder="0" step="0.5" oninput="calculateDiscountedPrice()" onchange="calculateDiscountedPrice()" style="flex: 1;">
                             <div style="padding: 10px; background: #f0f0f0; border-radius: 5px; font-weight: bold; min-width: 100px;">
                                 Giá: <span id="discounted-price" style="color: #E74C3C;">0 ₫</span>
                             </div>
