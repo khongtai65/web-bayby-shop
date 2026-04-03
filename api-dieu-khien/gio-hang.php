@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
         
         $user_id = $_SESSION['user_id'];
-        $sql = "SELECT c.id, c.product_id, c.quantity, p.name, p.price, p.image_path 
+        $sql = "SELECT c.id, c.product_id, c.quantity, p.name, p.price, p.image 
                 FROM cart c 
                 JOIN products p ON c.product_id = p.id 
                 WHERE c.user_id = ?
