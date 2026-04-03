@@ -110,25 +110,173 @@ function createProductCard(product) {
     const discount_badge = discount_percent > 0 ? `<div style="position: absolute; top: 10px; right: 10px; background: #E74C3C; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 0.9rem;">-${number_format_human(discount_percent)}%</div>` : '';
     
     return `
-        <div class="product-card">
+        <div class="product-card" onclick="viewProductDetail(${product.id})" style="cursor: pointer;">
             <div class="product-image" style="position: relative;">
                 ${image_html}
                 ${discount_badge}
             </div>
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
-                <div class="product-description">${product.description}</div>
+                <div class="product-description" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${product.description || 'Không có mô tả'}</div>
                 <div class="product-price" style="display: flex; gap: 10px; align-items: center;">
                     ${discount_percent > 0 ? `<span style="text-decoration: line-through; color: #999;">₫${number_format_human(product.price)}</span>` : ''}
                     <span style="${discount_percent > 0 ? 'color: #E74C3C; font-weight: bold; font-size: 1.1rem;' : ''}">${formatPrice(final_price)}</span>
                 </div>
                 <div class="product-actions">
                     <input type="number" id="qty-${product.id}" value="1" min="1" class="quantity-input">
-                    <button onclick="addToCart(${product.id})" class="btn btn-primary">🛒 Thêm</button>
+                    <button onclick="event.stopPropagation(); addToCart(${product.id})" class="btn btn-primary">🛒 Thêm</button>
                 </div>
             </div>
         </div>
     `;
+}
+
+// View product detail
+async function viewProductDetail(productId) {
+    try {
+        const response = await fetch(`${API_BASE}/san-pham.php?id=${productId}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            const product = data.data;
+            showProductDetailModal(product);
+        } else {
+            alert('❌ Không tìm thấy sản phẩm');
+        }
+    } catch (error) {
+        console.error('Error loading product detail:', error);
+        alert('❌ Lỗi khi tải thông tin sản phẩm');
+    }
+}
+
+// Show product detail modal
+function showProductDetailModal(product) {
+    const discount_percent = product.discount_percent || 0;
+    const final_price = product.price * (1 - discount_percent / 100);
+    
+    const modal = document.createElement('div');
+    modal.id = 'product-detail-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.7);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    const image_html = product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; max-height: 500px; object-fit: contain;">` : '<div style="width: 100%; height: 500px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">📦</div>';
+    
+    modal.innerHTML = `
+        <div style="background: white; border-radius: 15px; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; padding: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #eee;">
+                <h2 style="margin: 0; color: #333;">${product.name}</h2>
+                <button onclick="document.getElementById('product-detail-modal').remove()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #999;">&times;</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px; max-width: 100%;">
+                <!-- Hình ảnh -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="background: #f5f5f5; border-radius: 10px; overflow: hidden;">
+                        ${image_html}
+                    </div>
+                </div>
+                
+                <!-- Thông tin sản phẩm -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- Danh mục -->
+                    <div style="color: #666; font-size: 0.9rem;">
+                        📦 Danh mục: <strong>${product.category || 'N/A'}</strong>
+                    </div>
+                    
+                    <!-- Giá -->
+                    <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: #fff0e6; border-radius: 10px;">
+                        ${discount_percent > 0 ? `<span style="font-size: 0.9rem; text-decoration: line-through; color: #999;">₫${number_format_human(product.price)}</span>` : ''}
+                        <span style="font-size: 2rem; color: #E74C3C; font-weight: bold;">${formatPrice(final_price)}</span>
+                        ${discount_percent > 0 ? `<span style="background: #E74C3C; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold;">-${number_format_human(discount_percent)}%</span>` : ''}
+                    </div>
+                    
+                    <!-- Số lượng trong kho -->
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="color: #666;">Số lượng trong kho:</span>
+                        <span style="background: ${product.stock > 20 ? '#d4edda' : '#f8d7da'}; color: ${product.stock > 20 ? '#155724' : '#721c24'}; padding: 5px 10px; border-radius: 5px; font-weight: bold;">
+                            ${product.stock} sản phẩm
+                        </span>
+                    </div>
+                    
+                    <!-- Mô tả -->
+                    <div style="border-top: 1px solid #eee; padding-top: 20px;">
+                        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.1rem;">📝 Mô tả sản phẩm</h3>
+                        <div style="color: #666; line-height: 1.6; font-size: 0.95rem; text-align: justify;">
+                            ${product.description || 'Không có mô tả chi tiết'}
+                        </div>
+                    </div>
+                    
+                    <!-- Nút hành động -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="detail-qty" value="1" min="1" style="width: 60px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            <span style="color: #666;">sản phẩm</span>
+                        </div>
+                        <button onclick="addDetailProductToCart(${product.id})" style="background: #E74C3C; color: white; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1rem;">
+                            🛒 Thêm vào giỏ hàng
+                        </button>
+                    </div>
+                    
+                    <!-- Thông tin giúp đỡ -->
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center;">
+                        <p style="margin: 0; color: #666; font-size: 0.9rem;">
+                            ❓ Cần hỗ trợ? Liên hệ <strong>0866.021.711</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+// Add product from detail modal
+async function addDetailProductToCart(productId) {
+    const isLoggedIn = await checkLogin();
+    if (!isLoggedIn) {
+        document.getElementById('product-detail-modal').remove();
+        showLoginModal();
+        return;
+    }
+    
+    const quantity = parseInt(document.getElementById('detail-qty').value);
+    
+    try {
+        const response = await fetch(`${API_BASE}/gio-hang.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, quantity: quantity })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            alert('✅ Thêm vào giỏ hàng thành công!');
+            document.getElementById('product-detail-modal').remove();
+            updateCartCount();
+        } else {
+            alert('❌ Lỗi: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('❌ Lỗi khi thêm vào giỏ hàng');
+    }
 }
 
 // Helper function for number formatting
