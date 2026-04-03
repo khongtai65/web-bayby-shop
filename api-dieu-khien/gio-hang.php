@@ -162,15 +162,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         if (!validateInt($quantity) || $quantity <= 0) {
             jsonResponse('error', 'Invalid quantity', null, 400);
         }
-    }
-    
-    $sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iii", $quantity, $user_id, $product_id);
-    
-    if ($stmt->execute()) {
-        jsonResponse('success', 'Quantity updated');
-    } else {
-        jsonResponse('error', 'Failed to update quantity');
+        
+        $sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception('Prepare failed');
+        }
+        $stmt->bind_param("iii", $quantity, $user_id, $product_id);
+        
+        if ($stmt->execute()) {
+            jsonResponse('success', 'Quantity updated', null, 200);
+        } else {
+            throw new Exception('Update execute failed');
+        }
+    } catch (Exception $e) {
+        error_log("Cart PUT error: " . $e->getMessage());
+        jsonResponse('error', 'Failed to update quantity', null, 500);
     }
 }

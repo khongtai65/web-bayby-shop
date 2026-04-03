@@ -112,15 +112,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         jsonResponse('error', 'Failed to add product', null, 500);
     }
 }
-    
-    $sql = "UPDATE products SET name = ?, price = ?, description = ?, stock = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sisii", $name, $price, $description, $stock, $id);
-    
-    if ($stmt->execute()) {
-        jsonResponse('success', 'Product updated');
-    } else {
-        jsonResponse('error', 'Failed to update product');
+
+// PUT: Cập nhật sản phẩm (Admin only)
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    try {
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+            jsonResponse('error', 'Unauthorized', null, 403);
+        }
+        
+        if (!checkRateLimit($_SESSION['user_id'], 50)) {
+            jsonResponse('error', 'Too many requests', null, 429);
+        }
+        
+        $data = json_decode(file_get_contents("php://input"), true);
+        $id = $data['id'] ?? 0;
+        $name = $data['name'] ?? '';
+        $price = $data['price'] ?? 0;
+        $description = $data['description'] ?? '';
+        $stock = $data['stock'] ?? 100;
+        
+        if (!validateInt($id) || $id <= 0) {
+            jsonResponse('error', 'Valid product ID required', null, 400);
+        }
+        
+        if (!$name || !is_numeric($price) || $price <= 0) {
+            jsonResponse('error', 'Name and valid price required', null, 400);
+        }
+        
+        $name = sanitizeInput($name);
+        $description = sanitizeInput($description);
+        
+        $sql = "UPDATE products SET name = ?, price = ?, description = ?, stock = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sisii", $name, $price, $description, $stock, $id);
+        
+        if ($stmt->execute()) {
+            jsonResponse('success', 'Product updated', null, 200);
+        } else {
+            throw new Exception('Update failed');
+        }
+    } catch (Exception $e) {
+        error_log("Product PUT error: " . $e->getMessage());
+        jsonResponse('error', 'Failed to update product', null, 500);
     }
 }
 

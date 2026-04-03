@@ -68,8 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $clear_stmt->execute();
         
         jsonResponse('success', 'Order created', ['order_id' => $order_id]);
-    } else {
-        jsonResponse('error', 'Failed to create order');
+    } catch (Exception $e) {
+        error_log("Order POST error: " . $e->getMessage());
+        jsonResponse('error', 'Failed to create order', null, 500);
     }
 }
 
